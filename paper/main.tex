@@ -1,0 +1,334 @@
+% fanrisk - final report, ICTD 2026-27, IIT Delhi.
+% Compiles with the ACM 'acmart' class (Overleaf has it built in). Without acmart.cls it falls back to a plain two-column
+% article so a preview can still be built; the submitted version uses acmart.
+\IfFileExists{acmart.cls}{\def\useacm{1}}{\def\useacm{0}}
+\if1\useacm
+  \documentclass[sigconf,nonacm]{acmart}
+\else
+  \documentclass[10pt,twocolumn]{article}
+  \usepackage[margin=0.75in]{geometry}
+  \usepackage{times}
+  \usepackage[numbers,sort&compress]{natbib}
+  \usepackage{hyperref}
+  \newcommand{\affiliation}[1]{}
+  \newcommand{\email}[1]{}
+  \newcommand{\keywords}[1]{\gdef\kwtext{#1}}\def\kwtext{}
+  \newenvironment{acks}{\section*{Acknowledgments}}{}
+  \newsavebox{\absbox}
+  \renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup\hsize=0.86\textwidth\small\noindent\textbf{Abstract.}\ }{\egroup}
+  \makeatletter
+  \renewcommand{\maketitle}{\twocolumn[\begin{center}{\LARGE\bfseries\@title\par}\vspace{6pt}{\large Akhtar Hussain \quad Saharsh Laud\par}{\small Indian Institute of Technology Delhi, New Delhi, India\par}\vspace{8pt}\usebox{\absbox}\par\vspace{4pt}\parbox{0.86\textwidth}{\small\textbf{Keywords:} \kwtext}\vspace{10pt}\end{center}]}
+  \makeatother
+\fi
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\graphicspath{{figures/}}
+
+\title{From a DEM to a Warning Map: An Open, Reproducible Pipeline for Flash-Flood Risk on Himalayan Alluvial Fans, Validated on Leh 2010 and Dharali 2025}
+
+\author{Akhtar Hussain}
+\affiliation{%
+  \institution{Indian Institute of Technology Delhi}
+  \city{New Delhi}
+  \country{India}}
+\email{mcs262729@cse.iitd.ac.in}
+
+\author{Saharsh Laud}
+\affiliation{%
+  \institution{Indian Institute of Technology Delhi}
+  \city{New Delhi}
+  \country{India}}
+\email{mcs242002@cse.iitd.ac.in}
+
+\begin{document}
+
+\begin{abstract}
+Settlements in Ladakh and across the Himalaya are built on alluvial fans, at the mouths of steep catchments where a short cloudburst turns into a flash flood or debris flow. The 2010 Leh cloudburst killed more than 250 people. Most of the deaths were on two fans, while the nearest rain gauge logged 12.8\,mm that day. District authorities have no fan-scale hazard maps and no hydraulic modelling capacity.
+
+We present \texttt{fanrisk}, an open Python pipeline that starts from a freely available 30\,m DEM. It identifies fans and their catchments, ranks them with a two-level Analytic Hierarchy Process (AHP), builds and runs a HEC-RAS 2D model of the main flood path without the graphical interface, and overlays buildings, roads and critical facilities.
+
+Against the 2010 flood footprint at Choglamsar, the AHP risk map reaches an AUC of 0.85 (POD 0.59, FAR 0.16). The HEC-RAS model reaches an AUC of 0.77 and reproduces the observed depth at the gauged Sabu section within 3\%. The AHP result is stable across 423 random perturbations of the expert judgements (AUC 0.82--0.85). The hydraulic result is stable across Manning's $n$ from 0.04 to 0.08 (AUC 0.76--0.77). In the hindcast, 541 present-day buildings are flooded 0.3\,m or deeper, 200 of them in the extreme hazard class.
+
+Run without any tuning on the 2025 Dharali debris flow (Uttarakhand), the pipeline does not find the fan on its own. Given one manual apex, it measures the catchment within 8\% of the published value, classifies the event correctly as a debris flow, and marks the area around the deposit as high risk. We close with an impact-assessment design for the District Disaster Management Authority, panchayats and households, and release the tool, data and results on GitHub.
+\end{abstract}
+
+\keywords{flash flood, alluvial fan, AHP, HEC-RAS 2D, Ladakh, Himalaya, early warning, reproducibility, ICTD}
+
+\maketitle
+
+% =====================================================================================
+\section{Introduction}
+Ladakh lies in the rain shadow of the Great Himalaya, but aridity does not remove flood risk. On 4--6 August 2010 a cloudburst over Leh produced flash floods and debris flows. More than 250 people died, 1,749 houses were destroyed across 52 villages, and the region was cut off \cite{thayyen2013}. Reconstructed rainfall reached about 209--320\,mm in under twelve minutes over sub-kilometre areas, while the nearest gauge recorded 12.8\,mm for the day \cite{thayyen2013}. The deaths concentrated on the Sabu--Choglamsar fan and the Leh town fan, the places where water and debris left a confined channel and spread over houses \cite{bhatt2011}.
+
+The landform sequence is always the same: a steep catchment generates runoff and sediment, a feeder channel concentrates it, and an alluvial fan spreads it where people live. Regional susceptibility rasters blur this sequence \cite{negi2020,sharma2023}. Hydraulic models resolve it, but need terrain processing, a hand-built model and an engineer to run it, none of which a district office has.
+
+We built \texttt{fanrisk} to close that gap for the people who make siting and evacuation decisions: the District Disaster Management Authority (DDMA), panchayats and residents. It asks, for a given storm: which fans, which parts of each fan, and which buildings are in danger, and how deep and fast will the water be? Our contributions are:
+\begin{enumerate}
+  \item An \textbf{automated chain from a DEM to validated maps}: fan and catchment identification, a two-level AHP that separates catchment source susceptibility from fan hazard and exposure, and a HEC-RAS 2D model fitted, run in batch and read back without the GUI (Section~\ref{sec:method}).
+  \item \textbf{Validation against an observed flood}: a footprint and 648 damaged houses traced from satellite damage mapping of the 2010 event, scored with AUC, POD, FAR and CSI. This is supported by sensitivity tests on the AHP judgements, terrain conditioning and roughness, and a cross-check against published values (Section~\ref{sec:results}).
+  \item A \textbf{transfer test on a second event}, Dharali 2025, in a different climate and valley type, with no tuning. It reports where the pipeline fails as well as where it works (Section~\ref{sec:dharali}).
+  \item An \textbf{exposure layer and a delivery format} for non-specialists, and an \textbf{impact-assessment design} with indicators and survey instruments (Section~\ref{sec:impact}).
+\end{enumerate}
+The code, data, example runs and results are public at \url{https://github.com/SaharshLaud/fanrisk}.
+
+% =====================================================================================
+\section{Related Work}
+\textbf{Fan identification.} Morphometric indices separate flood-prone from debris-flow-prone fans. The Melton ratio, catchment relief divided by the square root of catchment area, is the most used: below about 0.3 for floods, 0.3--0.6 for debris floods, above 0.6 for debris flows \cite{wilford2004,descally2011,santangelo2012}. Norini et al. delineate fans automatically from DEMs by finding apexes where channels leave confined terrain and growing radial cones \cite{norini2016}. Our Stage~1 follows that idea with a valley-mouth detector based on terrain openness.
+
+\textbf{Multi-criteria susceptibility.} AHP weighted overlays are common for flash-flood and debris-flow susceptibility in data-scarce mountains \cite{saaty1980,negi2020,shadoud2025,karkani2021}. They are rarely validated against an observed footprint, and their sensitivity to the expert judgements is rarely reported \cite{feizizadeh2014,chen2010}. Negi et al. report an AUC of 0.766 for rainfall-induced debris-flow zones in Ladakh--Nubra \cite{negi2020}, which we use as a regional benchmark.
+
+\textbf{Coupling screening with hydraulics.} Several studies couple GIS multi-criteria maps with HEC-RAS simulations \cite{costache2020}. In practice each model is built by hand for one reach. The open \texttt{ras-commander} library makes HEC-RAS scriptable \cite{rascommander}, which lets the hydraulic step become part of an automated pipeline.
+
+\textbf{ICTD and early warning.} A people-centred early warning system has four elements: risk knowledge, monitoring and forecasting, dissemination, and preparedness to respond \cite{wmo2018}. Tools built for disaster agencies succeed or fail on whether officials and communities can read and act on them. We therefore design the evaluation around comprehension, decisions and harm, not only accuracy (Section~\ref{sec:impact}).
+
+% =====================================================================================
+\section{Study Areas and Data}
+\textbf{Leh 2010 (validation).} The Leh DEM is Copernicus GLO-30 \cite{copdem}, reprojected to UTM 43N at 26.7\,m (909 $\times$ 781 cells). Observations come from two sources:
+\begin{itemize}
+  \item Thayyen et al. \cite{thayyen2013} provide the reconstructed Sabu hydrograph (peak 1,070\,m$^3$/s at 23\,min) and the flow at section ST1 (depth 5.2\,m, velocity 8.3\,m/s, $\pm$35\%).
+  \item From Bhatt et al.'s damage map \cite{bhatt2011} we traced the severely affected area at Choglamsar (0.77\,km$^2$), 648 damaged houses (one third held out) and the window actually mapped. The figure was georeferenced to imagery by matching the stream line at a fixed scale (rms 17\,m).
+\end{itemize}
+
+\textbf{Dharali 2025 (transfer test).} On 5 August 2025 a debris flow from the Kheer Gad (Khirganga) buried Dharali village on its fan at the Bhagirathi confluence. At least 60 people died or went missing. Published values: catchment 17\,km$^2$, Melton ruggedness 0.8, deposit about 18--20\,ha (about 750 $\times$ 450\,m) \cite{kumar2026,isro2025}. The DEM was downloaded fresh by the tool (Copernicus GLO-30, two tiles).
+
+\textbf{Exposure.} Buildings come from Microsoft Global ML Building Footprints (25,384 in the Leh study area) \cite{msbuildings}. OpenStreetMap lists only 805 buildings there, 17 of them inside the surveyed window, against 648 damaged houses in 2010. Roads (270\,km) and 29 critical facilities come from OpenStreetMap.
+
+% =====================================================================================
+\section{Method}\label{sec:method}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{pipeline.png}
+  \caption{The \texttt{fanrisk} pipeline. Each stage narrows the area and raises physical detail, so the expensive 2D solver only runs where the cheap stages say it matters.}
+  \label{fig:pipeline}
+\end{figure*}
+
+Figure~\ref{fig:pipeline} shows the stages. Every number comes from four layers, each overriding the one before:
+\begin{enumerate}
+  \item method defaults;
+  \item a region profile (arid, humid or generic mountain);
+  \item the site file;
+  \item an explicit override section.
+\end{enumerate}
+The run log lists every value that differs from the defaults and where it came from. Leh 2010 is stored as a validation case, never as a default.
+
+\subsection{Stage 1: fans and catchments}
+The DEM is sink-filled and flow is accumulated, and channels are cells draining more than 0.5\,km$^2$. An apex is the first channel cell where the terrain \emph{openness} reaches 90\% of its value 2\,km downstream. Openness is the number of 16 compass directions in which the terrain does not rise above 8$^\circ$ within 1\,km. The detector also requires that openness rose by at least 5 directions and reaches at least 8. From each apex a radial cone is grown on a channel-filled surface. Touching fans merge into complexes, and the full catchment of every feeder is delineated. Twenty-nine morphometric values are recorded per feeder, including the Melton ratio, which sets the flow type (breaks 0.3 and 0.6 \cite{wilford2004}).
+
+Against hand-traced polygons the Sabu fan reaches an IoU of 0.86 and its catchment 0.96. The Sabu catchment is 62.4\,km$^2$, against 64.95\,km$^2$ published (\,$-4\%$). The same settings run unchanged on Trail Canyon, Death Valley.
+
+\subsection{Stage 2: two-level AHP}
+Catchment source susceptibility $C$ and fan hazard $H$ are scored separately. Each criterion is scored on an absolute physical scale, so scores compare across fans and DEMs.
+\begin{itemize}
+  \item The catchment matrix weights slope, local relief, upstream area and ruggedness (0.372, 0.249, 0.307, 0.073; CR 0.020).
+  \item The fan matrix weights inverse height above nearest drainage (HAND \cite{nobre2011}), fan slope, routed upstream area, local relief and event rainfall (0.306, 0.212, 0.295, 0.100, 0.087; CR 0.043).
+\end{itemize}
+Criteria without data are dropped and the matrix is re-solved. Exposure modifies hazard as $E = 0.5 + 0.5B$ with built-up density $B$, and risk is $R = H \cdot E$. Classes break at 0.2, 0.4, 0.55 and 0.7.
+
+Flow from each feeder is routed across the fan by multiple-flow-direction routing \cite{holmgren1994}, with a run-out corridor to the trunk river. An early version routed on the channel-filled fan surface used for delineation. This spread the modelled flow away from the incised channel the 2010 flood followed. The pipeline now routes on the real DEM (Section~\ref{sec:routing}).
+
+\subsection{Stage 3: HEC-RAS 2D without the GUI}
+For the chosen feeder the pipeline writes a handoff package: clipped terrain, flow-area polygon, centreline, inflow and outflow lines, hydrographs and a nine-run scenario table (flow $\times$ 0.65, 1.0, 1.35 crossed with clear water, bulked and Bingham). The command \texttt{hecras fit} re-targets a bundled minimal HEC-RAS 7.0.2 project to this package. It sets:
+\begin{itemize}
+  \item the perimeter, with computation points at 15\,m;
+  \item the boundary lines, with outflow friction slope 0.0055;
+  \item the full shallow-water equations, since the flow is fast and supercritical;
+  \item the projection and the terrain.
+\end{itemize}
+A batch command then writes each hydrograph, runs HEC-RAS headless through \texttt{ras-commander} \cite{rascommander}, exports maximum depth and velocity, and scores the run. Where the HEC-RAS map export is unavailable, maximum maps are rebuilt from the results file. Against HEC-RAS's own maps of the same run, depth differs by 0.11\,m on average (wet-area IoU 0.79) and speed by 0.20\,m/s. Hazard follows the UK depth--velocity rating $HR = d(v + 0.5) + DF$ with $DF = 0.5$, classed at 0.75, 1.25 and 2.5 \cite{fd2321}.
+
+Two terrain and roughness choices are tested rather than assumed:
+\begin{itemize}
+  \item \textbf{Channel burn.} A 27\,m DEM is about as wide as the channel, so a 40\,m strip can be lowered 0, 2 or 4\,m below the never-rising bed profile.
+  \item \textbf{Roughness.} One Manning's $n$ is used for the whole area (0.06, within the 0.04--0.07 range for boulder mountain channels \cite{chow1959}), and 0.04 and 0.08 are tested.
+\end{itemize}
+
+\subsection{Exposure and validation}
+Building centroids, road segments sampled every 10\,m, and facility points are classed by AHP risk, HEC-RAS hazard and the observed footprint.
+
+Validation scores only cells inside the window that was surveyed. Footprint cells are positives and the rest of the window negatives. AHP cells not covered by any complex score 0, since leaving them out would flatter the map. We report:
+\begin{itemize}
+  \item AUC (Mann--Whitney);
+  \item POD, FAR and CSI for the binary map (AHP high or above; HEC-RAS depth $\geq$ 0.3\,m);
+  \item the share of damaged houses hit.
+\end{itemize}
+
+% =====================================================================================
+\section{Results: Leh 2010}\label{sec:results}
+
+\subsection{Routing on the real DEM}\label{sec:routing}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{ahp_routing_fix_before_after.png}
+  \caption{AHP risk on the Sabu fan before and after routing on the real DEM. Red: 2010 severely affected area \cite{bhatt2011}; dashed: area mapped. AUC rises from 0.19 to 0.85. Imagery \copyright\ Esri.}
+  \label{fig:routing}
+\end{figure}
+Routed on the channel-filled surface, the AHP map ranked the 2010 footprint \emph{below} its surroundings (AUC 0.19) and covered only 57\% of it. Routed on the real DEM, it reaches an AUC of 0.85, POD 0.59 and FAR 0.16, and covers 90\% (Figure~\ref{fig:routing}). Its agreement with HEC-RAS rises from an AUC of 0.59 to 0.81. Only blend weights of 0, 0.5 and 1 were tried; we chose 0 on physical grounds, not by tuning. One disagreement remains: AHP rates the first 1.2\,km of the Sabu channel moderate where HEC-RAS rates it extreme.
+
+\subsection{Hydraulic model and terrain conditioning}
+\begin{table}[t]
+  \caption{HEC-RAS run R04 (1,070\,m$^3$/s, clear water) against the 2010 footprint and Sabu ST1 (observed 5.2\,m, 8.3\,m/s).}
+  \label{tab:burn}
+  \small
+  \begin{tabular}{@{}lccccc@{}}
+    \toprule
+    Variant & AUC & POD & FAR & CSI & ST1 depth (m) \\
+    \midrule
+    No burn            & 0.706 & 0.54 & 0.43 & 0.39 & 4.53 \\
+    \textbf{Burn 2\,m} & \textbf{0.770} & 0.51 & \textbf{0.34} & \textbf{0.40} & \textbf{5.04} \\
+    Burn 4\,m          & 0.758 & 0.38 & 0.32 & 0.32 & 5.61 \\
+    \midrule
+    $n = 0.04$ (2\,m)  & 0.762 & 0.42 & 0.33 & 0.35 & 4.79 \\
+    $n = 0.08$ (2\,m)  & 0.767 & 0.58 & 0.36 & 0.44 & 5.33 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+Burning the channel 2\,m into the terrain gives the best match (Table~\ref{tab:burn}, Figure~\ref{fig:burn}): AUC 0.77, FAR down from 0.43 to 0.34, and ST1 depth within 3\%. A 4\,m notch over-confines the flood (POD 0.38). This matches a Manning capacity estimate made before the runs: at the mean bed slope of 4.6\%, a 2\,m notch carries about 40\% of the peak, so the flood still spreads over the fan as in 2010, while a 4\,m notch carries about 120\%.
+
+Roughness changes the flooded area by about $\pm$15\%. It leaves the ranking (AUC 0.76--0.77) and the extreme-hazard area (0.48--0.49\,km$^2$) almost unchanged. No single $n$ matches both depth and speed at ST1; all values lie within the $\pm$35\% observation tolerance. Jarrett found that $n$ rises with slope in high-gradient streams \cite{jarrett1984}, so values up to 0.08 are plausible here.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{channel_burn_results.png}
+  \caption{Channel burn: skill against the 2010 footprint (a) and flow at Sabu ST1 (b).}
+  \label{fig:burn}
+\end{figure}
+
+\subsection{Sensitivity of the AHP to expert judgement}
+We perturbed every Saaty pairwise judgement by $\pm$1 or $\pm$2 steps and kept only samples with CR $\leq$ 0.10 (340 and 83 samples) \cite{feizizadeh2014}. We also scaled each fan weight from 0.5 to 1.5 with renormalisation \cite{chen2010}.
+\begin{itemize}
+  \item AUC against the footprint stays at 0.845--0.850 for $\pm$1 step, with a minimum of 0.824 for $\pm$2.
+  \item Every sample beats the regional benchmark of 0.766 \cite{negi2020}, and nearly all lie in the 0.8--0.9 ``excellent'' band \cite{hosmer2013}.
+  \item HAND carries most of the agreement with HEC-RAS: halving its weight drops that AUC from 0.81 to 0.76.
+  \item The core of the high-risk zone is stable: 59\% of baseline-high cells stay high in at least 90\% of $\pm$1 samples (Figure~\ref{fig:sens}).
+\end{itemize}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{ahp_sensitivity_2010.png}
+  \caption{AHP sensitivity. (a) AUC under random perturbation of the pairwise judgements; (b) one-at-a-time weight changes; (c) share of samples in which each cell stays high or above.}
+  \label{fig:sens}
+\end{figure*}
+
+\subsection{Who is exposed}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.85\textwidth]{exposure_map_leh2010.png}
+  \caption{Buildings and critical facilities hit, by AHP risk (left) and HEC-RAS hazard class (right); black line: 2010 footprint.}
+  \label{fig:exposure}
+\end{figure*}
+Of 25,384 buildings in the area (Figure~\ref{fig:exposure}):
+\begin{itemize}
+  \item the AHP map rates 1,423 high or above;
+  \item the HEC-RAS hindcast floods 541 to 0.3\,m or more, 200 of them in the extreme class;
+  \item 791 present-day buildings lie inside the 2010 footprint.
+\end{itemize}
+Inside the surveyed window, the AHP map flags 54\% of the buildings that flooded in 2010 at ``high'' (FAR 0.17) and 86\% at ``moderate'' (FAR 0.33). HEC-RAS flags 41\% at 0.3\,m and 78\% at any depth, so much of the 2010 damage was in shallow fringe flow.
+
+The hindcast floods 8.7\,km of road, 3.3\,km of it in the extreme class, and two bridges. Among facilities, the Leh District Jail sits in the extreme class, on a high-risk cell and inside the 2010 footprint. A public school and a fuel station are also exposed.
+
+% =====================================================================================
+\section{Transfer Test: Dharali 2025}\label{sec:dharali}
+\begin{table}[t]
+  \caption{Dharali 2025, default settings of the humid-mountain profile, DEM only, no rainfall. Published values from \cite{kumar2026,isro2025}.}
+  \label{tab:dharali}
+  \small
+  \begin{tabular}{@{}p{0.48\columnwidth}cc@{}}
+    \toprule
+    Check & \texttt{fanrisk} & Published \\
+    \midrule
+    Fan found automatically & no & -- \\
+    Catchment (one manual apex) & 18.3\,km$^2$ & 17\,km$^2$ \\
+    Melton ruggedness & 0.82 & 0.80 \\
+    Flow type & debris flow & debris flow \\
+    Cells high+, within 250\,m of deposit & 46\% & -- \\
+    Fan area; AHP high on it & 13; 4.8\,ha & 18--20\,ha \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+With every setting at the default of the humid-mountain profile, the fully automatic run finds no fan (Table~\ref{tab:dharali}). The openness detector assumes that a fan opens onto a wider trunk valley. At Dharali the Bhagirathi is itself a gorge: openness along the Kheer Gad peaks at 7 of 16 directions and closes again at the confluence. Lowering the threshold did not help, because the logic also expects the valley to stay open downstream. We left the detector unchanged and report the failure. An alternative steep-zone detector \cite{norini2016} over-detects here (26 fans, the one on the deposit with its apex 700\,m above the village).
+
+The tool's documented fallback is one manual apex. We placed it where the Khirganga enters the deposition zone mapped by NRSC \cite{nrsc2025}. With it, the pipeline measures the catchment within 8\%, matches the Melton ruggedness (0.82 against 0.80), and so classifies the event as a \emph{debris flow}. The same defaults give a clear-water flood for Leh, which is also correct. Within 250\,m of the deposit, 46\% of cells are high risk or above. The mapped fan (13\,ha) is smaller than the deposit, which crossed to the Bhagirathi.
+
+One published coordinate for Dharali lies about 1.4\,km east of the mapped deposit, so event checks should use mapped extents rather than village points.
+
+% =====================================================================================
+\section{Impact Assessment Design}\label{sec:impact}
+Accuracy is necessary but not sufficient: the tool only matters if officials read it correctly and change decisions. We designed a three-phase assessment for the next stage, structured by the four early-warning elements \cite{wmo2018}. It has not yet been run.
+
+\textbf{Evaluation questions.}
+\begin{enumerate}
+  \item Accuracy.
+  \item Comprehension.
+  \item Better decisions.
+  \item Uptake into the District Disaster Management Plan.
+  \item Equity and harm. A hazard label can lower land values or be used to move poorer households, and renters, seasonal workers, herders and tourists are easily missed.
+\end{enumerate}
+
+\textbf{Phases.}
+\begin{itemize}
+  \item \textbf{Phase A: usability.} 8--12 DDMA staff, engineers and councillors do five tasks in the web viewer, an 8-item map-reading test, and the System Usability Scale \cite{brooke1996}. The target is a mean of 70 or more, ``good'' on the adjective scale of \cite{bangor2009}.
+  \item \textbf{Phase B: tabletop exercise.} 15--25 participants follow the HSEEP format \cite{hseep2020}. Mixed groups draw evacuation zones, road closures and assembly points for a forecast storm, first without the tool and then with it. Each drawn zone is scored against the 2010 footprint with the same CSI used for the maps, so the tool's effect on decisions becomes a number.
+  \item \textbf{Phase C: household survey.} About 400 households, stratified by hazard class, plus a comparison fan without outreach for a difference-in-differences design. Questions follow the Protective Action Decision Model \cite{lindell2012}: threat perception, protective-action perception and trust in the source.
+\end{itemize}
+
+\textbf{Indicators.} Fourteen indicators run from outputs to impact. Examples are map skill, map-reading score, change in the CSI of drawn zones, households who know their zone and route, adoption in the district plan, permits in extreme zones, and a harm log. Collection and reporting formats are fixed: a ward brief, a facility hazard card, an After-Action Report and a web map with aggregate layers only. The study needs ethics approval at IIT Delhi before fieldwork.
+
+% =====================================================================================
+\section{Discussion and Limitations}
+\textbf{What the cheap screen is good for.} After the routing fix, the AHP map ranks the 2010 footprint better than the hydraulic model (AUC 0.85 against 0.77) and agrees with it (AUC 0.81). It runs in seconds per DEM, so it can choose where the 2D solver should run next. The hydraulic model adds what the AHP cannot: depths, speeds, hazard classes and a check against a measured section.
+
+\textbf{Limitations.}
+\begin{itemize}
+  \item The apex detector fails in narrow trunk valleys (Dharali), and fan outlines there are smaller than deposits.
+  \item A 27--30\,m DEM is as wide as the channel; finer terrain, such as ALOS 12.5\,m, was not tested.
+  \item HEC-RAS runs clear water with one roughness. Bingham debris-flow runs need rheology nobody measured for these sites.
+  \item Road embankments and culverts, which diverted the 2010 flow \cite{bhatt2011}, are not in the terrain.
+  \item The validation footprint is traced from a published figure (rms 17\,m), and exposure counts use today's buildings, not 2010's.
+  \item The 2010 hindcast uses the observed hydrograph. With DEM-derived inputs and uniform rain, the Sabu peak is under-predicted by 61\%, because a cloudburst rains on part of a basin. A forecast-driven warning therefore needs a cloudburst-scale storm model, not uniform design rain.
+\end{itemize}
+
+% =====================================================================================
+\section{Conclusion}
+A freely available DEM is enough to find the fans, rank where flash floods will hurt, build and run a 2D hydraulic model, and list who is exposed, with skill that can be measured against an observed flood. On Leh 2010 the pipeline matches the observed footprint (AUC 0.85 for the AHP screen, 0.77 for HEC-RAS) and the measured depth at Sabu (within 3\%). It is robust to the expert weights and to roughness. On Dharali 2025 it transfers once a single apex is given, and gets the flow type right. All code, data and results are open at \url{https://github.com/SaharshLaud/fanrisk}, so a district team or a researcher can repeat every number here and run the same chain on their own valley.
+
+\begin{acks}
+We thank Prof. Aaditeshwar Seth for guidance throughout the ICTD course. Building outlines \copyright\ Microsoft (ODbL); roads and facilities \copyright\ OpenStreetMap contributors (ODbL); DEM Copernicus GLO-30 \copyright\ DLR and Airbus, provided under COPERNICUS by the EU and ESA; background imagery \copyright\ Esri, Maxar, Earthstar Geographics.
+\end{acks}
+
+\begin{thebibliography}{30}
+\bibitem{thayyen2013} R.~J. Thayyen, A.~P. Dimri, P.~Kumar, and G.~Agnihotri. 2013. Study of cloudburst and flash floods around Leh, India, during August 4--6, 2010. \emph{Natural Hazards} 65(3), 2175--2204. doi:10.1007/s11069-012-0464-2.
+\bibitem{bhatt2011} C.~M. Bhatt, G.~S. Rao, P.~Manjusree, and V.~Bhanumurthy. 2011. Potential of high resolution satellite data for disaster management: a case study of Leh, Jammu \& Kashmir (India) flash floods, 2010. \emph{Geomatics, Natural Hazards and Risk} 2(4), 365--375. doi:10.1080/19475705.2011.580014.
+\bibitem{negi2020} H.~S. Negi et~al. 2020. Susceptibility assessment of rainfall induced debris flow zones in Ladakh--Nubra region, Indian Himalaya. \emph{Journal of Earth System Science} 129, 30.
+\bibitem{sharma2023} C.~P. Sharma et~al. 2023. Debris flow susceptibility assessment of Leh Valley, Ladakh, based on concepts of connectivity, propagation and evidence-based probability. \emph{Natural Hazards} 115, 1833--1859.
+\bibitem{wilford2004} D.~J. Wilford, M.~E. Sakals, J.~L. Innes, R.~C. Sidle, and W.~A. Bergerud. 2004. Recognition of debris flow, debris flood and flood hazard through watershed morphometrics. \emph{Landslides} 1, 61--66. doi:10.1007/s10346-003-0002-0.
+\bibitem{descally2011} F.~A. De~Scally et~al. 2011. Morphometric identification of alluvial fans susceptible to debris-flow and flash-flood hazards. \emph{Geomorphology}.
+\bibitem{santangelo2012} N.~Santangelo et~al. 2012. Topographic predictors of susceptibility to alluvial fan flooding, Southern Apennines. \emph{Earth Surface Processes and Landforms}.
+\bibitem{norini2016} G.~Norini, M.~C. Zuluaga, I.~J. Ortiz, D.~T. Aristiz{\'a}bal, and A.~M.~F. Lagmay. 2016. Delineation of alluvial fans from Digital Elevation Models with a GIS algorithm for the geomorphological mapping of the Earth and Mars. \emph{Geomorphology} 273, 134--149.
+\bibitem{saaty1980} T.~L. Saaty. 1980. \emph{The Analytic Hierarchy Process}. McGraw-Hill.
+\bibitem{shadoud2025} M.~Shadoud et~al. 2025. An integrated geomorphologic framework for flash-flood susceptibility assessment in data-scarce arid and semi-arid regions using morphometric analysis with AHP/PCA.
+\bibitem{karkani2021} A.~Karkani et~al. 2021. Flash flood susceptibility evaluation in human-affected areas using geomorphological methods: the case of 9 August 2020, Euboea, Greece. \emph{GeoHazards} 2(4), 366--382.
+\bibitem{feizizadeh2014} B.~Feizizadeh and T.~Blaschke. 2014. An uncertainty and sensitivity analysis approach for GIS-based multicriteria landslide susceptibility mapping. \emph{International Journal of Geographical Information Science} 28(3), 610--638. doi:10.1080/13658816.2013.869821.
+\bibitem{chen2010} Y.~Chen, J.~Yu, and S.~Khan. 2010. Spatial sensitivity analysis of multi-criteria weights in GIS-based land suitability evaluation. \emph{Environmental Modelling \& Software} 25(12), 1582--1591. doi:10.1016/j.envsoft.2010.06.001.
+\bibitem{costache2020} R.~Costache et~al. 2020. Flash-flood hazard assessment coupling GIS multi-criteria and hydraulic (HEC-RAS) simulation.
+\bibitem{rascommander} CLB Engineering. 2026. \emph{ras-commander}: HEC-RAS automation library, version 0.113. \url{https://github.com/gpt-cmdr/ras-commander}.
+\bibitem{wmo2018} World Meteorological Organization. 2018. \emph{Multi-hazard Early Warning Systems: A Checklist}. WMO, Geneva.
+\bibitem{copdem} European Space Agency. Copernicus DEM GLO-30. Registry of Open Data on AWS, \url{https://registry.opendata.aws/copernicus-dem/}.
+\bibitem{kumar2026} V.~Kumar, N.~Chauhan, A.~K. Srivastav, Y.~Sundriyal, R.~Sinha, R.~Negi, V.~Gupta, A.~Verma, M.~Puniya, and R.~Devrani. 2026. Dharali debris flow on 5 August 2025, Uttarakhand: event reconstruction and geomorphic implications. \emph{Current Science} 130(3), 229--238. doi:10.18520/cs/v130/i3/229-238.
+\bibitem{isro2025} Indian Space Research Organisation. 2025. Indian satellite data based analysis of the Dharali flash flood. \url{https://www.isro.gov.in/ISRO_EN/indian_satellite_data_based_analysis_of_the_dharali_flash_flood.html}.
+\bibitem{nrsc2025} National Remote Sensing Centre / NDEM. 2025. Dharali, Uttarkashi: debris deposition map (6 August 2025).
+\bibitem{msbuildings} Microsoft. Global ML Building Footprints. \url{https://github.com/microsoft/GlobalMLBuildingFootprints}.
+\bibitem{nobre2011} A.~D. Nobre et~al. 2011. Height Above the Nearest Drainage: a hydrologically relevant new terrain model. \emph{Journal of Hydrology} 404, 13--29.
+\bibitem{holmgren1994} P.~Holmgren. 1994. Multiple flow direction algorithms for runoff modelling in grid based elevation models: an empirical evaluation. \emph{Hydrological Processes} 8(4), 327--334.
+\bibitem{fd2321} Defra and Environment Agency. 2006. \emph{Flood Risks to People, Phase 2}. R\&D Technical Report FD2321/TR1.
+\bibitem{chow1959} V.~T. Chow. 1959. \emph{Open-Channel Hydraulics}. McGraw-Hill.
+\bibitem{jarrett1984} R.~D. Jarrett. 1984. Hydraulics of high-gradient streams. \emph{Journal of Hydraulic Engineering} 110(11), 1519--1539.
+\bibitem{hosmer2013} D.~W. Hosmer, S.~Lemeshow, and R.~X. Sturdivant. 2013. \emph{Applied Logistic Regression} (3rd ed.). Wiley.
+\bibitem{brooke1996} J.~Brooke. 1996. SUS: a ``quick and dirty'' usability scale. In \emph{Usability Evaluation in Industry}. Taylor \& Francis, 189--194.
+\bibitem{bangor2009} A.~Bangor, P.~Kortum, and J.~Miller. 2009. Determining what individual SUS scores mean: adding an adjective rating scale. \emph{Journal of Usability Studies} 4(3), 114--123.
+\bibitem{hseep2020} FEMA. 2020. \emph{Homeland Security Exercise and Evaluation Program (HSEEP)}. U.S. Department of Homeland Security.
+\bibitem{lindell2012} M.~K. Lindell and R.~W. Perry. 2012. The Protective Action Decision Model: theoretical modifications and additional evidence. \emph{Risk Analysis} 32(4), 616--632. doi:10.1111/j.1539-6924.2011.01647.x.
+\end{thebibliography}
+
+\end{document}

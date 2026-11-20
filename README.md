@@ -66,7 +66,7 @@ For Leh the same defaults give a clear-water flood, which is also correct.
 You need Python 3.10 or newer.
 
 ```bash
-git clone https://github.com/<your-account>/fanrisk.git
+git clone https://github.com/SaharshLaud/fanrisk.git
 cd fanrisk
 pip install -e ".[geo]"            # numpy, rasterio, geopandas, matplotlib
 python tests/selftest.py            # checks the install
