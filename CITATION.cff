@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use fanrisk, please cite it as below."
+title: "fanrisk: flash-flood risk on alluvial fans from a DEM - automatic fans, AHP risk, HEC-RAS 2D and validation"
+authors:
+  - family-names: Hussain
+    given-names: Akhtar
+    affiliation: "Indian Institute of Technology Delhi"
+  - family-names: Laud
+    given-names: Saharsh
+    affiliation: "Indian Institute of Technology Delhi"
+version: 0.2.0
+date-released: 2026-11-25
+license: MIT
+keywords: [flash flood, alluvial fan, AHP, HEC-RAS, Ladakh, Himalaya, risk mapping, ICTD]

@@ -1,0 +1,70 @@
+# fanrisk site file - one file describes one study area. Paths are relative to this file. Lines starting with # are switched off.
+# Run:   python -m fanrisk check site.toml     then     python -m fanrisk run site.toml
+
+[site]
+name = "My site"
+dem = "dem.tif"                    # your DEM (GeoTIFF). Degrees are reprojected to UTM automatically.
+                                   # Windows paths: single quotes ('C:\data\dem.tif') or forward slashes ("C:/data/dem.tif")
+output_dir = "output"
+region_profile = "generic"         # generic | arid_mountain | humid_mountain | path to your own .toml  ('fanrisk profiles' lists them)
+# validation_case = "leh_2010"     # observations of a documented flood, used only to TEST results
+
+[stages]
+risk = true                        # AHP hazard / risk maps on the fans
+hecras_handoff = false             # also write the HEC-RAS 2D package for one flood path
+
+[storm]                            # leave rainfall out to map susceptibility only (no peak flows)
+# rainfall_mm = 75                 # design or forecast rain depth (mm) ...
+# rainfall_raster = "rain.tif"     # ... or a raster of event rainfall (mm)
+# duration_min = 15                # storm duration in minutes (needed with rainfall)
+
+[runoff]                           # how rain becomes runoff; the region profile sets a starting assumption
+# method = "scs_cn"                # "coefficient" or "scs_cn"
+# coefficient = 0.8                # share of rain that runs off (method "coefficient")
+# curve_number = 85                # one SCS curve number for the whole area (method "scs_cn") ...
+# curve_number_raster = "cn.tif"   # ... or a curve-number raster ...
+# landcover_raster = "worldcover.tif"   # ... or ESA WorldCover + HYSOGs250m soil groups (fanrisk builds the curve numbers)
+# soil_group_raster = "hysogs.tif"
+# default_soil_group = "C"         # used where the soil raster has no data
+# antecedent_moisture = 2          # 1 dry | 2 average | 3 wet
+
+[layers]                           # optional rasters / polygons; each one adds a criterion
+# historical_rainfall = ""         # long-term rainfall raster
+# bare_fraction = ""               # 0-1 bare ground
+# built_density = ""               # 0-1 built-up density (exposure: turns hazard into risk)
+# glacial_lakes = ""               # lake polygons (optional field volume_m3)
+# reference_fans = ""              # hand-mapped fan polygons, to score the delineation
+
+[validation]                       # optional observed flood, to score the risk map
+# flood_footprint = ""             # polygons of the flooded area
+# flood_points = ""                # points of flooded / damaged places
+# survey_window = ""               # the area that was actually surveyed (only it is scored)
+
+[targets]
+mode = "all"                       # all | top (largest complexes) | ids
+# ids = [2]                        # fan complex numbers (run once with "all" to see them)
+# lonlat = [77.62, 34.13]          # or: the complex nearest this point
+# manual_apexes = [["A1", "Stream name", 77.619, 34.127]]     # [id, system, lon, lat] where you know the apex
+
+# [ahp]                            # your own pairwise judgements (Saaty 1-9); see the README for the criteria order
+# class_breaks = [0.25, 0.4, 0.55, 0.7]
+# catchment_matrix = [[...7 x 7...]]
+# fan_matrix = [[...6 x 6...]]
+
+[hecras]                           # used when hecras_handoff = true, and by 'fanrisk hecras ...'
+# complex = 2                      # fan complex to simulate (default: the first target)
+# feeder = "F1"                    # its feeder (default: the largest)
+# reach_km = 4.5                   # how far to follow the flood from the fan apex
+# half_width_m = 600               # half-width of the 2D flow area: wider than any credible flood
+# inflow = "pipeline"              # "pipeline" = the storm above | "observed" = hydrograph of the validation case (hindcast)
+# project = "model/site.prj"       # the HEC-RAS project to run (make it with 'fanrisk hecras fit', or by hand)
+# mannings_n = 0.06               # one roughness for the whole 2D area (default: the template's 0.06); per-class roughness is not applied yet
+# base_plan = "01"
+# version = "7.0.2"
+# runs = ["R04"]                   # [] = every run of the scenario table
+
+# [score]
+# wet_depth_m = 0.3
+
+# [advanced]                       # any engine setting by its name (see fanrisk/defaults.py), for example:
+# TOE_FRACTION = 0.5

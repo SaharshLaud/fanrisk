@@ -1,0 +1,33 @@
+# Step 7 test (channel burned into the terrain). Same as site.toml apart from output_dir, project and burn_depth_m.
+# Leh 2010 (Sabu stream to Choglamsar): the validation example. Leh is only a test case - nothing here is a default of the tool.
+# All paths are relative to this file, so the folder works on any PC. Put the Leh DEM at fanrisk\data\dem_utm.tif, then:
+#   python -m fanrisk check examples/leh_2010/site.toml
+[site]
+name = "Leh - Sabu fan (validation of the 2010 flood)"
+dem = "../../../data/dem_utm.tif"
+output_dir = "../../../runs/leh_2010_burn0"
+region_profile = "arid_mountain"
+validation_case = "leh_2010"
+
+[stages]
+risk = true
+hecras_handoff = true
+
+[storm]
+rainfall_mm = 75
+duration_min = 15
+
+[validation]                       # the 2010 Choglamsar footprint, georeferenced from Bhatt et al. (2011) Fig. 7
+flood_footprint = "../../../data/validation/footprint_2010.geojson"
+flood_points = "../../../data/validation/damage_points_2010.geojson"
+survey_window = "../../../data/validation/survey_window_2010.geojson"
+
+[hecras]
+complex = 2
+feeder = "F1"
+reach_km = 5.5
+half_width_m = 1000
+burn_depth_m = 0                   # step 7: channel strip (40 m) lowered this far below the bed profile; 0 = plain DEM
+inflow = "observed"                # hindcast: the observed 2010 hydrograph of the validation case
+base_plan = "02"
+project = "../../../runs/leh_2010_burn0/hecras/model/leh2d.prj"   # made by 'fanrisk hecras fit'

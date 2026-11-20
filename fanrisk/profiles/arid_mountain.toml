@@ -1,0 +1,13 @@
+# Region profile: arid / cold-desert mountains (bare rock, thin or no soil, sparse vegetation).
+# STARTING ASSUMPTIONS, not a calibration: check every number against local knowledge.
+[profile]
+name = "arid_mountain"
+description = "Bare rock and debris slopes, thin soils, short intense cloudbursts: nearly all rain runs off."
+use_when = "Cold or hot desert mountains, for example the Trans-Himalaya, the dry Andes, the Basin and Range."
+
+[settings]
+RUNOFF_METHOD = "coefficient"
+RUNOFF_COEFF = 1.0            # bare rock / crusted ground under intense short rain; lower it where soil or vegetation covers the catchment
+RAS_N_CHANNEL = 0.05          # boulder-bed mountain channel
+RAS_N_FAN = 0.035             # bare fan surface
+RAS_N_BUILT = 0.10

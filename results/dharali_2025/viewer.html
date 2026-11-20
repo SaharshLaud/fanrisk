@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flood risk viewer</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+ html,body{margin:0;height:100%;font:13px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#fff;color:#1a1a1a}
+ #map{position:absolute;top:44px;bottom:0;left:0;right:0}
+ header{height:44px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid #ddd;box-sizing:border-box}
+ header b{font-size:14px} header span{color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .legend{background:rgba(255,255,255,.94);padding:8px 10px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25);max-width:190px}
+ .legend h4{margin:6px 0 3px;font-size:12px} .legend h4:first-child{margin-top:0}
+ .legend i{display:inline-block;width:14px;height:10px;margin-right:6px;border-radius:2px;vertical-align:middle}
+ .leaflet-popup-content{font-size:12px} .leaflet-popup-content td{padding:1px 6px 1px 0}
+ #op{position:absolute;bottom:18px;left:10px;z-index:999;background:rgba(255,255,255,.94);padding:6px 8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+</style></head><body>
+<header><b>Dharali - Kheer Gad fan (test of the 2025 debris flow)</b><span>AHP screening, HEC-RAS 2D simulation, the 2010 flood and who is exposed</span></header>
+<div id="map"></div>
+<div id="op">Raster opacity <input id="opacity" type="range" min="0" max="100" value="85"></div>
+<script>
+const D = {"images": [{"name": "AHP risk, moderate and above (all fan complexes)", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAToAAABsCAYAAAD64n4CAAAEWElEQVR42u3d3Y0aMRSAUUrJU5pIWkwP20h6SgORojwgITTr9b99PedIvCWweDwf42GAxwMAgLTfj+8fz5vRAIQOIGJ4hA5YGjuhA4TukMcFhE7oAKETOkDoBjzunx/fPp43WwwQOoDoS1fBA8IET+gAoUssX4UOEDqAyKGzpQChA4gUOp+NBUKHLucITeiAY0NnmQqEjt77u6epmy0BCB3AjOC9hunvr59f3oQOELpP7u/5eFf3aUsBU5ebPYMndMCxocv5/6n7tMWA4aFrDZbQAUJXcLP14CZydvqrI6PSJWhqWSp04Ojn4/XjTv9vPS+zuHPoRBA2Dt1r7J73ffVvUoFcFRDLWpiwRCud6KU761VURhzJ5cRQ6AQPoTsqdLPfFKgdc6GDTSJXczRSEqVenw4QOqFDyKYuu3YI3YyY1G6XqJeh2LsIE7rZR0m7XBwrdELHTY7kVkdu5s76Pj4j/97SbVR7XlPoELrG0LU+fm0sZo2P0AkdgfU60jo9dK1jV/scep7XFDqEbuMvadx1RxI6oeOgo7cIy+pdd6SRb4x8dSHzbpeY2AMRuhuf+1wZupnP02xgStRydh4Tc37wRnxud3ZohA6h4/jQXc09sWPp8tSr7l7R6/GJj1ToVs1B8wuhE7pjQwdLAidsewcvta1KAyl0CJ3QCR1YqrJ6G5ZcRFy6zY00QscW21HoIHEEkDppnVoGGc14obtaynpxQ+iE7sjQpY7uhI5jdobcn8XLuU+ju9bz8pCRpzCMMkKH0MFspedfWiezHSJ26ErjZ8QROoQORi5Ld/gqpRE7HevHXPAQOqG7begEj+HL0tav6om+87F2rB3ZIXRCJ3TQEraSr8d+v63aCUXvvHEVOrYN3ewdQ+iEDi4nTs8fPBEZoRM6hI7wsVs9X11yQvPEKXnjQeBYPW+NBkWBEzoiz2UjQVHoan/CzoRD6AgfNaFD8AgZutSPCuf8PxMOoWO60t/VFDpOfEE3GjeMXc/QmXgIHcuidvWuaemSVeiwjOXY0M34IL6Jh9AFORze6XvuR76TOuJ5mXgIndBtFToTEKG72WDlfjtHr/Nbs4/UhA4ylcZgtw+B9/gaohNC51UXDg7da+xaIld6LVrLpxBG/A1CBxmh6xm+1aFr/fsjhc75FBC6KWHLuZ+ef8vz+e5yLlTouPUSePbOJnTA7UKXG6rcb+j96mLe0cthgYMAy+IRy9UeP+PXK3Sp2AkdCN2w0LXGoTZ4vaL2ejOjIMiydkTgUgESOuDo0M16fqOXzGYQBI7eZ29e1J47WxUGoQOWhq42GrWRGfHmh1kDBwav9chI6IDbhK40ID1jkzp3KG7AY/R1cEIH3CZ0I5ePlqdAsdQ1ckIH3DZ0NcEZGTpbEahe4vY8shI6IFzoei4zjTggdAC7ha70B6SNOBCO0AG3OSKM8kM0AEIH8B640vgZOUDoAKIvb40GIHQAJy95AYQOAACAQv8AXGDGuylzcqAAAAAASUVORK5CYII=", "bounds": [[31.032335963219975, 78.74636648056209], [31.04618298939054, 78.78680648857296]], "on": true}], "vectors": [{"name": "2010 damage points (Bhatt et al. 2011)", "kind": "dots", "on": false, "data": {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [78.7792, 31.0412]}, "properties": {"name": "Dharali debris deposit (centre of the NRSC deposition map)", "source": "NRSC/NDEM 2025, map frame 31 02'21\"-31 02'36\" N, 78 46'25\"-78 47'05\" E. Kumar et al. 2026 give 31.0407 N, 78.7972 E for the village, about 1.4 km east of the mapped deposit.", "holdout": 0}}]}}], "legends": [{"title": "AHP risk", "items": [["moderate", "#fd8d3c"], ["high", "#f03b20"], ["very high", "#bd0026"]]}], "view": [[31.032335963219975, 78.74636648056209], [31.04618298939054, 78.78680648857296]]};
+const HZ = ["dry","low","moderate","significant","extreme"];
+const map = L.map('map', {preferCanvas:true});
+const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'Imagery &copy; Esri'});
+// OpenStreetMap's own tile servers refuse pages opened from a file (no referrer), so the street map comes from Esri too
+const osm = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'Map &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'});
+sat.addTo(map);
+const overlays = {}, rasters = [];
+D.images.forEach(im => { const l = L.imageOverlay(im.url, im.bounds, {opacity:.85}); rasters.push(l); overlays[im.name] = l; if (im.on) l.addTo(map); });
+function fmt(v, d){ return (v===null||v===undefined) ? '-' : (typeof v==='number' ? v.toFixed(d) : v); }
+function popup(p){
+  return '<table>' + (p.name ? '<tr><td colspan=2><b>'+p.name+'</b></td></tr>' : '') +
+    '<tr><td>type</td><td>'+(p.kind||'')+'</td></tr>' +
+    '<tr><td>HEC-RAS hazard</td><td>'+(p.hec_class===null||p.hec_class===undefined ? '-' : HZ[Math.round(p.hec_class)])+'</td></tr>' +
+    '<tr><td>max depth</td><td>'+fmt(p.hec_depth_m,2)+' m</td></tr>' +
+    '<tr><td>AHP risk</td><td>'+fmt(p.ahp_risk,2)+'</td></tr>' +
+    '<tr><td>in 2010 flood</td><td>'+(p.in_2010_footprint ? 'yes' : 'no')+'</td></tr></table>';
+}
+const hzCol = ["#999","#4393c3","#92c5de","#f4a582","#b2182b"];
+D.vectors.forEach(v => {
+  let l;
+  if (v.kind === 'outline') l = L.geoJSON(v.data, {style:{color:'#000', weight:2, fill:false, dashArray:'5 3'}});
+  else if (v.kind === 'dots') l = L.geoJSON(v.data, {pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:2.5,color:'#6a3d9a',weight:0,fillOpacity:.9})});
+  else if (v.kind === 'buildings') l = L.geoJSON(v.data, {pointToLayer:(f,ll)=>{const p=f.properties,h=Math.round(p.hec_class||0);
+      return L.circleMarker(ll,{radius:3.5,color:'#fff',weight:.6,fillColor:h>=1?hzCol[h]:(p.ahp_risk>=0.55?'#fd8d3c':'#555'),fillOpacity:.95});},
+      onEachFeature:(f,x)=>x.bindPopup(popup(f.properties))});
+  else if (v.kind === 'facilities') l = L.geoJSON(v.data, {pointToLayer:(f,ll)=>L.marker(ll,{icon:L.divIcon({className:'',html:'<div style="width:14px;height:14px;background:#2166ac;border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 3px #000"></div>',iconSize:[14,14]})}),
+      onEachFeature:(f,x)=>x.bindPopup(popup(f.properties))});
+  else l = L.geoJSON(v.data, {pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:7,color:'#000',weight:1.5,fillColor:'#ffff33',fillOpacity:.9}),
+      onEachFeature:(f,x)=>x.bindPopup('<pre style="margin:0">'+JSON.stringify(f.properties,null,1)+'</pre>')});
+  overlays[v.name] = l; if (v.on) l.addTo(map);
+});
+L.control.layers({"Satellite (Esri)":sat, "Street map (Esri)":osm}, overlays, {collapsed:false}).addTo(map);
+const lg = L.control({position:'bottomright'});
+lg.onAdd = () => { const d = L.DomUtil.create('div','legend');
+  d.innerHTML = D.legends.map(g => '<h4>'+g.title+'</h4>' + g.items.map(i => '<div><i style="background:'+i[1]+'"></i>'+i[0]+'</div>').join('')).join('') +
+    '<h4>Buildings hit</h4><div><i style="background:#b2182b"></i>by HEC-RAS hazard</div><div><i style="background:#fd8d3c"></i>AHP high only</div>' +
+    '<h4>Other</h4><div><i style="background:#2166ac"></i>critical facility</div><div><i style="border:2px dashed #000;height:6px;width:10px"></i>2010 flood</div>';
+  return d; };
+lg.addTo(map);
+map.fitBounds(D.view);
+L.control.scale({imperial:false}).addTo(map);
+document.getElementById('opacity').oninput = e => rasters.forEach(r => r.setOpacity(e.target.value/100));
+</script></body></html>

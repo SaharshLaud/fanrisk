@@ -1,0 +1,13 @@
+# Region profile: humid / monsoon mountains (soil-mantled, vegetated slopes).
+# STARTING ASSUMPTIONS, not a calibration: check every number against local knowledge.
+[profile]
+name = "humid_mountain"
+description = "Soil and vegetation hold back part of the rain: runoff from the SCS curve number, wet antecedent conditions."
+use_when = "Monsoon or temperate mountains with forest, shrub or crops, for example the outer Himalaya, the Western Ghats, the Alps."
+
+[settings]
+RUNOFF_METHOD = "scs_cn"      # needs a curve number: [runoff] curve_number, curve_number_raster, or landcover_raster + soil_group_raster
+CN_AMC = 3                    # wet ground before the storm (typical in a monsoon); 2 = average
+RAS_N_CHANNEL = 0.06          # vegetated banks, wood and boulders in the channel
+RAS_N_FAN = 0.06              # brush / crops on the fan (Chow 1959: 0.05-0.07 for light brush)
+RAS_N_BUILT = 0.10

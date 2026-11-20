@@ -1,0 +1,63 @@
+[   0.1s] fanrisk 0.1.0 - site 'Dharali - Kheer Gad fan (test of the 2025 debris flow)' - file backend: rasterio
+[   0.1s] Region profile: humid_mountain - Soil and vegetation hold back part of the rain: runoff from the SCS curve number, wet antecedent conditions.
+[   0.1s] Settings that differ from the method defaults:
+[   0.1s]   APEX_MODE                  = both                   <- site.toml [advanced]
+[   0.1s]   CN_AMC                     = 3                      <- region profile 'humid_mountain'
+[   0.1s]   CURVE_NUMBER               = 80                     <- site.toml [runoff] curve_number
+[   0.1s]   MANUAL_APEXES              = [('D1', 'Kheer Gad', 78.7823, 31.0392)] <- site.toml [targets] manual_apexes
+[   0.1s]   RAS_N_CHANNEL              = 0.06                   <- region profile 'humid_mountain'
+[   0.1s]   RAS_N_FAN                  = 0.06                   <- region profile 'humid_mountain'
+[   0.1s]   RUNOFF_METHOD              = scs_cn                 <- region profile 'humid_mountain'
+[   0.1s] NOTE: no rainfall given: the maps show susceptibility with the storm trigger at its worst case (1.0), and no peak flows
+[   0.2s] DEM is in degrees - warping to EPSG:32644 at 28.6 m ...
+[   0.3s] DEM: dem.tif  (EPSG:32644, 749 x 751 cells of 28.6 m)
+[   0.3s] Hydrological analysis: sink filling + flow directions (751 x 749 cells of 28.6 m) ...
+[   0.9s] Flow accumulation ...
+[   1.1s]   drainage network: 10928 channel cells (threshold 611 cells = 0.50 km2)
+[   1.1s] Fan surface (channels filled) and slope ...
+[   1.7s] Apex detection (valley mouths): 0 found
+[   1.7s]   known apex D1       (catchment 18.3 km2): nearest detected apex is none
+[   1.7s] Delineating fans for 1 apexes ...
+[   1.7s] Done: 1 fans accepted, 0 candidates rejected
+[   1.7s] Coalescence: 1 fans -> 1 fan complexes
+[   2.0s]   validation points    <- dharali_points.geojson: 1 feature(s)
+[   2.0s]   validation: 1 flooded cell(s) on the DEM grid (0.00 km2)
+[   2.1s] Criteria rasters: slope, fan slope, local relief (+-17 cells), ruggedness (TRI), upstream area
+[   2.1s] AHP weights (consistency ratio must be <= 0.10):
+[   2.1s]   catchment source (5 criteria, CR 0.0204): slope 0.372, local_relief 0.249, upstream_area 0.307, ruggedness 0.073
+[   2.1s]   fan hazard       (5 criteria, CR 0.0290): hand_inv 0.362, fan_slope 0.238, upstream_area 0.305, local_relief 0.095
+[   2.1s]   (catchment AHP: hist_rainfall, bare_sparse not supplied -> removed from the matrix and the weights re-solved)
+[   2.1s]   (fan AHP: event_rainfall not supplied -> removed from the matrix and the weights re-solved)
+[   2.3s] FAN COMPLEXES ranked by catchment-source susceptibility (C) and feeders
+[   2.3s]   id   area km2 C max  prior.  feeders  feeder catchments (km2) : C
+[   2.3s]   1        0.13  0.70    0.70        2  F1 18.3 : 0.48; F2 175.8 : 0.70
+[   2.3s] Target fan complex(es): C1
+[   2.5s]   C1: run-out corridor adds 0.67 km2 beyond the 0.13 km2 fan (flood path followed up to 3000 m past the toe)
+[   2.7s] Complex C1 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[   2.7s]   absolute scale: 0.00  0.06  0.31  0.33  0.10
+[   2.7s]   relative scale: 0.00  0.06  0.38  0.31  0.05
+[   2.7s]   feeders (catchment km2, C source, trigger T):
+[   2.7s]     F1      18.3 km2  C 0.48  T 1.00
+[   2.7s]     F2     175.8 km2  C 0.70  T 1.00
+[   2.7s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[   2.7s]     0.05 km2: r = 0.99, top-20% overlap 0.88, median HAND 0 m, 80% of the fan within 5 m
+[   2.7s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 1 m, 77% of the fan within 5 m
+[   2.7s]     0.50 km2: r = 0.91, top-20% overlap 0.87, median HAND 2 m, 74% of the fan within 5 m
+[   2.7s]     1.00 km2: r = 0.71, top-20% overlap 0.66, median HAND 2 m, 71% of the fan within 5 m
+[   2.7s]     2.00 km2: r = 0.67, top-20% overlap 0.64, median HAND 2 m, 67% of the fan within 5 m
+[   2.7s]   validation risk_abs               ROC-AUC 0.032 | success-rate AUC 0.035 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 97% of the map
+[   2.7s]   validation risk_rel               ROC-AUC 0.124 | success-rate AUC 0.125 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 88% of the map
+[   2.7s]   validation worst_cloudburst_abs   ROC-AUC 0.023 | success-rate AUC 0.025 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 98% of the map
+[   2.7s]   validation worst_cloudburst_rel   ROC-AUC 0.173 | success-rate AUC 0.175 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 83% of the map
+[   2.7s] Writing fan outputs to C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025\fans
+[   2.9s] Risk files -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025\risk: risk_abs / risk_rel / hazard / flow_km2 / worst-case / per-feeder scenario GeoTIFFs (+ .qml styles), master_table.csv, ahp_summary.json, ahp_validation.csv
+[   3.3s] Vector layers -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025\fans\fanrisk.gpkg
+[   3.3s] RESULTS: 1 fans in 1 fan complexes
+[   3.3s]   FAN COMPLEXES (merged flood plains / bajadas) and ALL catchments feeding them
+[   3.3s]   id   fans     area km2   catch km2  Melton  flags
+[   3.3s]   1    1            0.13        18.3    0.82  
+[   3.3s]   FEEDERS (C = source susceptibility 0-1, T = storm trigger 0-1)
+[   3.3s]   feeder     catch km2      C   rain mm   peak m3/s    tp min      T
+[   3.3s]   C1-F1          18.34   0.48         -           -         -   1.00
+[   3.3s]   C1-F2         175.83   0.70         -           -         -   1.00
+[   3.3s] Done. Open C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025 in QGIS: the risk GeoTIFFs load with their colours.

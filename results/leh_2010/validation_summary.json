@@ -1,0 +1,44 @@
+{
+  "cells_scored": 2872,
+  "footprint_cells": 1084,
+  "cell_m": 26.650174414854014,
+  "maps": {
+    "AHP C2 risk": {
+      "kind": "risk",
+      "AUC": 0.8493802471581763,
+      "footprint_covered_pct": 90.03690036900369,
+      "POD": 0.5913284132841329,
+      "FAR": 0.155467720685112,
+      "CSI": 0.5332778702163061,
+      "threshold": 0.55,
+      "points_hit_pct": 58.0246913580247,
+      "holdout_points_hit_pct": 60.36866359447005,
+      "points_AUC": 0.7896530712293203
+    },
+    "AHP all complexes risk": {
+      "kind": "risk",
+      "AUC": 0.8493802471581763,
+      "footprint_covered_pct": 90.03690036900369,
+      "POD": 0.5913284132841329,
+      "FAR": 0.155467720685112,
+      "CSI": 0.5332778702163061,
+      "threshold": 0.55,
+      "points_hit_pct": 58.0246913580247,
+      "holdout_points_hit_pct": 60.36866359447005,
+      "points_AUC": 0.7896530712293203
+    },
+    "HEC-RAS depth (R04)": {
+      "kind": "depth",
+      "AUC": 0.7699350735118089,
+      "footprint_covered_pct": 100.0,
+      "POD": 0.5046125461254612,
+      "FAR": 0.33777239709443097,
+      "CSI": 0.4013206162876009,
+      "threshold": 0.3,
+      "points_hit_pct": 40.89506172839506,
+      "holdout_points_hit_pct": 40.55299539170507,
+      "points_AUC": 0.7282129491534786
+    }
+  },
+  "scored_within": "survey window and the HEC-RAS model area"
+}

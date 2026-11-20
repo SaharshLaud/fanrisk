@@ -1,0 +1,28 @@
+# Dharali, Uttarkashi (Uttarakhand), 5 August 2025: a debris flow from the Kheer Gad (Khirganga) buried the village on its fan.
+# Second test event. Nothing is tuned: fresh DEM (tools/get_dem.py), every setting the default of the humid_mountain profile, no rainfall
+# (susceptibility from the DEM alone). The automatic apex detector finds no fan here (see site_auto.toml), so this file adds ONE manual
+# apex - the tool's documented fallback - where the Khirganga enters the deposition zone mapped by NRSC (map frame 31 02'21"-31 02'36" N,
+# 78 46'25"-78 47'05" E), snapped to the DEM channel. Checked by tools/check_event.py against: catchment ~17 km2, Melton ruggedness 0.8
+# (debris flow), deposit ~18-20 ha (Kumar et al. 2026, Current Science 130(3); ISRO 2025; NRSC 2025).
+[site]
+name = "Dharali - Kheer Gad fan (test of the 2025 debris flow)"
+dem = "../../data/dharali_2025/dem.tif"
+output_dir = "../../runs/dharali_2025"
+region_profile = "humid_mountain"
+
+[stages]
+risk = true
+hecras_handoff = false             # a debris flow: the clear-water HEC-RAS model does not apply
+
+[runoff]
+curve_number = 80                  # only used if a storm is given; the profile needs one
+
+[validation]
+flood_points = "../../data/validation/dharali_2025/dharali_points.geojson"
+
+[targets]
+mode = "all"
+manual_apexes = [["D1", "Kheer Gad", 78.7823, 31.0392]]   # [id, stream, lon, lat]
+
+[advanced]
+APEX_MODE = "both"                 # the manual apex AND whatever the detector finds

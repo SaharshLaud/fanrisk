@@ -1,0 +1,5 @@
+EVENT CHECK - Dharali - fully automatic run (no manual apex)
+  place: 31.0412 N, 78.7792 E  (map x 288055, y 3436287)
+  fans found on the DEM: 0
+  NO FAN FOUND - the check fails at the first step
+  AHP risk at the place: NOT MAPPED (no complex map covers it)

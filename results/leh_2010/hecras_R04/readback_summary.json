@@ -1,0 +1,91 @@
+{
+  "model": {
+    "cell_m": 26.650174414854014,
+    "wet_area_km2": 1.3366562407159066,
+    "max_depth_m": 6.753501892089844,
+    "max_speed_ms": 9.209223747253418,
+    "hazard_class_area_km2": {
+      "dry": 7.683287572829266,
+      "low": 0.0035511589817106975,
+      "moderate": 0.27699040057343444,
+      "significant": 0.570316132462738,
+      "extreme": 0.48579854869802347
+    },
+    "wet_cells_at_boundary_lines": 44,
+    "boundary_lines_known": true,
+    "wet_cells_at_model_edge": 0,
+    "wet_share_at_model_edge_pct": 0.0
+  },
+  "footprint": {
+    "hits": 547,
+    "misses": 537,
+    "false_alarms": 1335,
+    "POD": 0.5046125461254612,
+    "FAR": 0.7093517534537725,
+    "CSI": 0.2261264985531211,
+    "bias": 1.7361623616236161,
+    "observed_cells": 1084,
+    "modelled_cells": 1882,
+    "observed_inside_model_area_pct": 100.0
+  },
+  "points": {
+    "n_points": 648,
+    "n_inside_model_area": 648,
+    "hit_rate": 0.7037037037037037,
+    "median_depth_at_points_m": 0.4417405277490616
+  },
+  "widths": [],
+  "probes": [
+    {
+      "name": "Sabu ST1 (Thayyen et al. 2013)",
+      "x": 741394.4114764124,
+      "y": 3779101.647828174,
+      "depth_obs_m": 5.2,
+      "depth_model_m": 5.04070520401001,
+      "depth_error_pct": -3.0633614613459694,
+      "depth_ok": true,
+      "speed_obs_ms": 8.3,
+      "speed_model_ms": 6.9204301834106445,
+      "speed_error_pct": -16.621323091438022,
+      "speed_ok": true
+    }
+  ],
+  "ahp": {
+    "cells_compared": 9862,
+    "spearman_risk_vs_hazard_rating": 0.5786880992298026,
+    "spearman_risk_vs_depth": 0.566465646598493,
+    "roc_auc_risk_vs_wet": 0.8613051536999837,
+    "spearman_risk_vs_depth_wet_cells_only": 0.12439883378247975,
+    "roc_auc_risk_vs_deep_ge_1m": 0.869559711848938,
+    "roc_auc_risk_vs_wet_within_300m_of_centreline": 0.7959634435232045,
+    "wet_cells_share_by_ahp_class_pct": [
+      1.0549694614103275,
+      23.875624652970572,
+      44.1976679622432,
+      30.20544142143254,
+      0.6662965019433648
+    ],
+    "wet_share_by_ahp_class_pct": [
+      0.6513541309564621,
+      10.73926073926074,
+      38.36144578313253,
+      63.70023419203748,
+      100.0
+    ],
+    "area_share_by_ahp_class_pct": [
+      29.5781788683837,
+      40.60028391806936,
+      21.040356925572905,
+      8.659501115392414,
+      0.12167917258162643
+    ]
+  },
+  "files_used": {
+    "depth": "Depth (Max).tif",
+    "depth_kind": "max",
+    "velocity": "Velocity (Max).tif",
+    "velocity_kind": "max",
+    "arrival": null,
+    "maximum_maps": true
+  }
+}

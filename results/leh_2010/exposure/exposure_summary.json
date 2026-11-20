@@ -1,0 +1,89 @@
+{
+  "osm_file": "/tmp/claude-0/-home-claude/31cdd59f-5b0e-5fee-b66e-5c8ad1d247e3/scratchpad/cli/fanrisk/data/map.osm",
+  "building_source": "Microsoft Global ML Building Footprints (25384) - OSM has 805",
+  "run_dir": "/tmp/claude-0/-home-claude/31cdd59f-5b0e-5fee-b66e-5c8ad1d247e3/scratchpad/cli/fanrisk/runs/leh_2010_burn2/hecras/runs/R04",
+  "ahp_maps": [
+    "ahp_C1_risk_abs.tif",
+    "ahp_C2_risk_abs.tif",
+    "ahp_C3_risk_abs.tif",
+    "ahp_C4_risk_abs.tif",
+    "ahp_C5_risk_abs.tif",
+    "ahp_C6_risk_abs.tif"
+  ],
+  "ahp_high_threshold": 0.55,
+  "buildings": {
+    "total": 25384,
+    "ahp_high": 1423,
+    "hec_wet": 541,
+    "hec_by_class": {
+      "low": 1,
+      "moderate": 83,
+      "significant": 257,
+      "extreme": 200
+    },
+    "in_2010_footprint": 791,
+    "in_survey_window": 1721
+  },
+  "critical": {
+    "total": 29,
+    "ahp_high": 2,
+    "hec_wet": 2,
+    "in_2010_footprint": 3
+  },
+  "roads_km": {
+    "total": 269.75,
+    "ahp_high": 13.57,
+    "hec_wet": 8.7,
+    "hec_significant_plus": 7.4,
+    "hec_extreme": 3.26,
+    "in_2010_footprint": 9.88
+  },
+  "bridges_hit": [
+    {
+      "name": "w233672365",
+      "highway": "unclassified"
+    },
+    {
+      "name": "w700032374",
+      "highway": "track"
+    }
+  ],
+  "building_check_2010": {
+    "AHP high or above": {
+      "buildings_in_window": 1721,
+      "flooded_2010": 791,
+      "hits": 430,
+      "misses": 361,
+      "false_alarms": 89,
+      "POD": 0.544,
+      "FAR": 0.171
+    },
+    "AHP moderate or above": {
+      "buildings_in_window": 1721,
+      "flooded_2010": 791,
+      "hits": 683,
+      "misses": 108,
+      "false_alarms": 339,
+      "POD": 0.863,
+      "FAR": 0.332
+    },
+    "HEC-RAS depth >= 0.3 m": {
+      "buildings_in_window": 1721,
+      "flooded_2010": 791,
+      "hits": 323,
+      "misses": 468,
+      "false_alarms": 119,
+      "POD": 0.408,
+      "FAR": 0.269
+    },
+    "HEC-RAS any water": {
+      "buildings_in_window": 1721,
+      "flooded_2010": 791,
+      "hits": 617,
+      "misses": 174,
+      "false_alarms": 375,
+      "POD": 0.78,
+      "FAR": 0.378
+    }
+  }
+}

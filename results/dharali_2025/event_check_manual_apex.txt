@@ -1,0 +1,13 @@
+EVENT CHECK - Dharali - Kheer Gad fan (test of the 2025 debris flow)
+  place: 31.0412 N, 78.7792 E  (map x 288055, y 3436287)
+  fans found on the DEM: 1
+  nearest fan: fan 1 in complex C1, the place is ON it (0 m away)
+    fan area 0.13 km2, mean slope 12.5 deg, apex 2569 m
+  catchment draining onto it: 18.3 km2   (published 17.0 km2: +8%)
+  Melton ratio: 0.82   (published 0.80)
+  flow type from the Melton breaks 0.3 / 0.6: DEBRIS FLOW
+  (complex C1 has 2 feeders; the largest, F2, drains 175.8 km2 with Melton 0.28)
+  AHP risk at the place: 0.33 = LOW  (ahp_C1_risk_abs.tif)
+    within 250 m: highest 0.77, 46% of cells high or above
+  area of that fan marked high or above: 4.8 ha   (published deposit about 20 ha)
+  complex C1 ranks 1 of 1 complexes by catchment source score (C = 0.70)

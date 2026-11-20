@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Run outputs (results worth keeping are copied into results/)
+runs/
+_selftest/
+*_status.txt
+*_preflight.txt
+selftest_log.txt
+burn?_*.txt
+n00?_*.txt
+maps_?_*.txt
+validate_?_*.txt
+exposure_?_*.txt
+dharali_?_*.txt
+chain_?_*.txt
+
+# Downloaded on demand (tools/get_dem.py, tools/get_ms_buildings.py)
+data/dharali_2025/
+data/ms_buildings_*.csv.gz
+mysite/
+
+# HEC-RAS results and scratch
+*.hdf
+!fanrisk/templates/hecras/**/*.hdf
+*.tmp
+*.bak
+*.aux.xml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

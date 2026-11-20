@@ -1,0 +1,18 @@
+EXPOSURE (today's buildings and roads)
+  buildings mapped: 25384  [Microsoft Global ML Building Footprints (25384) - OSM has 805]
+    in AHP 'high' or above:          1423
+    wet in the HEC-RAS run:          541   (by hazard class: low 1, moderate 83, significant 257, extreme 200)
+    inside the 2010 footprint:       791   (survey window holds 1721)
+  critical facilities: 29; AHP high 2, HEC-RAS wet 2, in the 2010 footprint 3
+  roads: 269.8 km mapped; AHP high 13.57 km, HEC-RAS wet 8.70 km (significant+ 7.40, extreme 3.26), in the 2010 footprint 9.88 km
+  bridges on a flooded / high-risk road: w233672365 (unclassified), w700032374 (track)
+  building check vs 2010, AHP high or above      :  430 of 791 flooded buildings flagged (POD 0.54),   89 false alarms (FAR 0.17)
+  building check vs 2010, AHP moderate or above  :  683 of 791 flooded buildings flagged (POD 0.86),  339 false alarms (FAR 0.33)
+  building check vs 2010, HEC-RAS depth >= 0.3 m :  323 of 791 flooded buildings flagged (POD 0.41),  119 false alarms (FAR 0.27)
+  building check vs 2010, HEC-RAS any water      :  617 of 791 flooded buildings flagged (POD 0.78),  375 false alarms (FAR 0.38)
+  critical facilities at risk:
+    Leh District Jail            amenity=police             HEC-RAS extreme     AHP high | in 2010 footprint
+    Rigjung Public School        amenity=school             HEC-RAS moderate    AHP below high
+    Mani-wall                    amenity=place_of_worship   HEC-RAS dry         AHP below high | in 2010 footprint
+    Indian Oil                   amenity=fuel               HEC-RAS dry         AHP high | in 2010 footprint
+  NOTE: the building layers show what stands today, not in 2010. Roads and facilities: OpenStreetMap (completeness in Ladakh is uneven).

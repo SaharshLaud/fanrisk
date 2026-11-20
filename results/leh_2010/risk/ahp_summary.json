@@ -1,0 +1,1461 @@
+{
+  "weights_catchment": {
+    "slope": 0.37179366353988585,
+    "local_relief": 0.24872353699778643,
+    "upstream_area": 0.3066649439620486,
+    "ruggedness": 0.0728178555002792
+  },
+  "weights_fan": {
+    "hand_inv": 0.30636496861603923,
+    "fan_slope": 0.21193423630618025,
+    "upstream_area": 0.29465959110038525,
+    "local_relief": 0.10036416436297643,
+    "event_rainfall": 0.08667703961441875
+  },
+  "consistency_ratio": {
+    "catchment": 0.020449176723384897,
+    "fan": 0.04331295886922231
+  },
+  "dropped_criteria": {
+    "catchment": [
+      "hist_rainfall",
+      "bare_sparse"
+    ],
+    "fan": []
+  },
+  "targets": [
+    {
+      "complex_id": 1,
+      "class_area_km2": {
+        "absolute": [
+          1.1079616022937377,
+          6.598053388018476,
+          5.23511857083791,
+          1.786232967800481,
+          0.013494404130500652
+        ],
+        "relative": [
+          0.0,
+          1.5887885284173662,
+          5.551171720210163,
+          6.877884715777279,
+          0.723015968676298
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.9357051173711142,
+          "top20_overlap": 0.8761581920903955,
+          "hand_median_m": 0.70947265625,
+          "share_hand_lt5m": 0.7974463984582029
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 2.66162109375,
+          "share_hand_lt5m": 0.6641291255119248
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9660589778181435,
+          "top20_overlap": 0.9298000929800093,
+          "hand_median_m": 3.53466796875,
+          "share_hand_lt5m": 0.5867983618405204
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.9099263034108356,
+          "top20_overlap": 0.8568552896443749,
+          "hand_median_m": 5.02294921875,
+          "share_hand_lt5m": 0.4987231992291014
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.8693221241775583,
+          "top20_overlap": 0.8087145969498911,
+          "hand_median_m": 6.64794921875,
+          "share_hand_lt5m": 0.4335822693326909
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 7.516261141893519,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 44.76029872319923,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 35.51433389544688,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 12.117562033245001,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0915442062153698,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 10.778125752830643,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 37.65839556733317,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 46.658636473139005,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 4.9048422066971815,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 22.654781980245726,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 65.34329077330764,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 11.404480847988436,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.5974463984582028,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 1.5466152734280896,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 57.13322091062395,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 35.557696940496264,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 5.762466875451698,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 65.28450671976947,
+          "C_source": 0.7005183858883652,
+          "T_trigger": 1.0,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 43.772727458633376,
+            "peak_m3s": 1395.9901938359135,
+            "volume_m3": 4896338.003982711,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F2",
+          "catchment_km2": 13.083890152214895,
+          "C_source": 0.5693778567716732,
+          "T_trigger": 0.8218326080241457,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 31.47612426562362,
+            "peak_m3s": 389.07335220582013,
+            "volume_m3": 981291.7614161171,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F3",
+          "catchment_km2": 11.059729532639798,
+          "C_source": 0.5637447998999329,
+          "T_trigger": 0.808318631672135,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 28.581494455569253,
+            "peak_m3s": 362.1891381027393,
+            "volume_m3": 829479.7149479848,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F4",
+          "catchment_km2": 3.338799674604398,
+          "C_source": 0.45940230919187075,
+          "T_trigger": 0.6248751381445835,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 22.805509037451422,
+            "peak_m3s": 137.03340233702394,
+            "volume_m3": 250409.97559532986,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F5",
+          "catchment_km2": 3.1875203019835223,
+          "C_source": 0.45110082785775374,
+          "T_trigger": 0.5938421984499406,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 25.663157696628122,
+            "peak_m3s": 116.25689394600809,
+            "volume_m3": 239064.02264876416,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F6",
+          "catchment_km2": 3.176156593242048,
+          "C_source": 0.32656672781592266,
+          "T_trigger": 0.5744185583313669,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 28.34349606380999,
+            "peak_m3s": 104.88764563770388,
+            "volume_m3": 238211.74449315362,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F7",
+          "catchment_km2": 1.6953232978686872,
+          "C_source": 0.38416962692041823,
+          "T_trigger": 0.5509086799862883,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 17.135665553696846,
+            "peak_m3s": 92.60350009940234,
+            "volume_m3": 127149.24734015155,
+            "curve_number": null
+          }
+        }
+      ]
+    },
+    {
+      "complex_id": 2,
+      "class_area_km2": {
+        "absolute": [
+          3.2038556332993915,
+          6.999334352951785,
+          3.8047117330048414,
+          0.977278951766784,
+          0.01420463592684279
+        ],
+        "relative": [
+          0.0,
+          1.7698976364846117,
+          8.64423119328018,
+          4.128577432136857,
+          0.4566790450479957
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.9076485259887066,
+          "top20_overlap": 0.8538512179065174,
+          "hand_median_m": 1.662841796875,
+          "share_hand_lt5m": 0.7207727638619252
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 3.391357421875,
+          "share_hand_lt5m": 0.5763056962924381
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9418837378051602,
+          "top20_overlap": 0.9292075816396438,
+          "hand_median_m": 4.13427734375,
+          "share_hand_lt5m": 0.5314172072541313
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.919080628805793,
+          "top20_overlap": 0.8873994638069705,
+          "hand_median_m": 5.264404296875,
+          "share_hand_lt5m": 0.49221080543586343
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.8990482553281738,
+          "top20_overlap": 0.8250162022034997,
+          "hand_median_m": 6.775390625,
+          "share_hand_lt5m": 0.45196268762725506
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 984,
+          "covered_pct": 89.86301369863014,
+          "flooded_share_pct": 4.659311520431839,
+          "auc_roc": 0.9489882318738757,
+          "auc_success": 0.9280670731707317,
+          "mean_rank_pct": 7.1907853175790155,
+          "classes": [
+            {
+              "area_pct": 21.359912874662626,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 46.66414129456887,
+              "flooded_pct": 3.2520325203252036
+            },
+            {
+              "area_pct": 25.365784364790002,
+              "flooded_pct": 31.300813008130078
+            },
+            {
+              "area_pct": 6.5154600123111885,
+              "flooded_pct": 64.32926829268293
+            },
+            {
+              "area_pct": 0.09470145366731379,
+              "flooded_pct": 1.1178861788617886
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 984,
+          "covered_pct": 89.86301369863014,
+          "flooded_share_pct": 4.659311520431839,
+          "auc_roc": 0.9479086794220314,
+          "auc_success": 0.927008231707317,
+          "mean_rank_pct": 7.293710591587661,
+          "classes": [
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 11.7998011269473,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 57.63056962924381,
+              "flooded_pct": 1.8292682926829267
+            },
+            {
+              "area_pct": 27.524977508404753,
+              "flooded_pct": 63.31300813008131
+            },
+            {
+              "area_pct": 3.0446517354041385,
+              "flooded_pct": 34.857723577235774
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 984,
+          "covered_pct": 89.86301369863014,
+          "flooded_share_pct": 4.659311520431839,
+          "auc_roc": 0.9632549901982754,
+          "auc_success": 0.9416046747967479,
+          "mean_rank_pct": 5.830582756559134,
+          "classes": [
+            {
+              "area_pct": 30.63592026137601,
+              "flooded_pct": 0.40650406504065045
+            },
+            {
+              "area_pct": 59.164733178654295,
+              "flooded_pct": 11.585365853658537
+            },
+            {
+              "area_pct": 9.19551115109617,
+              "flooded_pct": 73.17073170731707
+            },
+            {
+              "area_pct": 1.0038354088735262,
+              "flooded_pct": 14.83739837398374
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 984,
+          "covered_pct": 89.86301369863014,
+          "flooded_share_pct": 4.659311520431839,
+          "auc_roc": 0.9809604781545704,
+          "auc_success": 0.9585534552845528,
+          "mean_rank_pct": 4.142529344939266,
+          "classes": [
+            {
+              "area_pct": 2.1781334343482173,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 67.14333065012548,
+              "flooded_pct": 0.10162601626016261
+            },
+            {
+              "area_pct": 24.963303186703918,
+              "flooded_pct": 25.203252032520325
+            },
+            {
+              "area_pct": 5.69155736540556,
+              "flooded_pct": 74.1869918699187
+            },
+            {
+              "area_pct": 0.023675363416828448,
+              "flooded_pct": 0.5081300813008129
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 62.358351718839856,
+          "C_source": 0.7197182871676365,
+          "T_trigger": 1.0,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 56.6750988588019,
+            "peak_m3s": 1029.8599982021801,
+            "volume_m3": 4676876.378912989,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F2",
+          "catchment_km2": 7.868658071674564,
+          "C_source": 0.3825402370441597,
+          "T_trigger": 0.7264628118387636,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 31.37572698308055,
+            "peak_m3s": 234.73763521269237,
+            "volume_m3": 590149.3553755924,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F3",
+          "catchment_km2": 6.824617331051619,
+          "C_source": 0.49782858520258516,
+          "T_trigger": 0.7436186610463358,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 24.848221210674655,
+            "peak_m3s": 257.07441058678813,
+            "volume_m3": 511846.29982887144,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F4",
+          "catchment_km2": 5.790519835577464,
+          "C_source": 0.5160686841890573,
+          "T_trigger": 0.7130689611339663,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 24.78736314981696,
+            "peak_m3s": 218.656842736438,
+            "volume_m3": 434288.98766830977,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F5",
+          "catchment_km2": 1.1576778280376874,
+          "C_source": 0.3735648067268445,
+          "T_trigger": 0.49260129199442154,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 15.93687665320068,
+            "peak_m3s": 67.99239716934456,
+            "volume_m3": 86825.83710282655,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F6",
+          "catchment_km2": 1.0731602442729729,
+          "C_source": 0.32656327537344715,
+          "T_trigger": 0.4824460004459697,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 15.59005695307865,
+            "peak_m3s": 64.4306811490604,
+            "volume_m3": 80487.01832047295,
+            "curve_number": null
+          }
+        }
+      ]
+    },
+    {
+      "complex_id": 3,
+      "class_area_km2": {
+        "absolute": [
+          0.44105394552846866,
+          2.982263312840644,
+          2.218764131772844,
+          1.247167034376797,
+          0.024147881075632746
+        ],
+        "relative": [
+          0.07457433861592465,
+          1.276996769823167,
+          2.1811218465667106,
+          3.3160722571214496,
+          0.06463109346713469
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.8918671836013741,
+          "top20_overlap": 0.8221806270472625,
+          "hand_median_m": 0.0,
+          "share_hand_lt5m": 0.6960139716457777
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 6.10205078125,
+          "share_hand_lt5m": 0.4551058146702281
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9414071196490911,
+          "top20_overlap": 0.8703170028818443,
+          "hand_median_m": 10.137939453125,
+          "share_hand_lt5m": 0.34620916375590716
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.8960177029488761,
+          "top20_overlap": 0.695254680017414,
+          "hand_median_m": 14.7001953125,
+          "share_hand_lt5m": 0.25539346620094516
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.8396321637210513,
+          "top20_overlap": 0.5893877551020408,
+          "hand_median_m": 19.0748291015625,
+          "share_hand_lt5m": 0.19416478323402506
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 6.3797000205465375,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 43.137456338606945,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 32.09369221286214,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 18.03986028354222,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.34929114444216147,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 1.0786932401890281,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 18.471337579617835,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 31.549208958290524,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 47.96589274707212,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.934867474830491,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 32.145058557633035,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 57.12964865420177,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 10.4479145264023,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.27737826176289293,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 10.745839326073558,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 66.29340456133141,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 22.39572632011506,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.5650297924799671,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 21.983804792178244,
+          "C_source": 0.6866431648900443,
+          "T_trigger": 0.8711561687824967,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 40.724168728948655,
+            "peak_m3s": 505.2734513117722,
+            "volume_m3": 1648785.3594133684,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F2",
+          "catchment_km2": 3.897752098325662,
+          "C_source": 0.565417539405654,
+          "T_trigger": 0.694499399190135,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 18.41009836359335,
+            "peak_m3s": 198.16819508403387,
+            "volume_m3": 292331.4073744246,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F3",
+          "catchment_km2": 1.8721710151578799,
+          "C_source": 0.5133807507526289,
+          "T_trigger": 0.5703491021822213,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 17.07107889707946,
+            "peak_m3s": 102.65034100964584,
+            "volume_m3": 140412.82613684097,
+            "curve_number": null
+          }
+        }
+      ]
+    },
+    {
+      "complex_id": 4,
+      "class_area_km2": {
+        "absolute": [
+          1.0000063692497325,
+          4.544063032997009,
+          2.6484543685598383,
+          0.3785535474503604,
+          0.0
+        ],
+        "relative": [
+          0.017755794908553488,
+          0.6477313982640313,
+          5.13852704653538,
+          2.5966074474268623,
+          0.17045563112211348
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.8581023092169375,
+          "top20_overlap": 0.8336498290922901,
+          "hand_median_m": 1.1573486328125,
+          "share_hand_lt5m": 0.8540768975803779
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 2.3009033203125,
+          "share_hand_lt5m": 0.7328471992045078
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9839585986263858,
+          "top20_overlap": 0.8985450255603618,
+          "hand_median_m": 2.739501953125,
+          "share_hand_lt5m": 0.6800629764666888
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.9213038066878203,
+          "top20_overlap": 0.8157201955622414,
+          "hand_median_m": 3.432373046875,
+          "share_hand_lt5m": 0.608054358634405
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.8969973135086747,
+          "top20_overlap": 0.7448500180701121,
+          "hand_median_m": 4.3021240234375,
+          "share_hand_lt5m": 0.5542757706330792
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 11.66721909181306,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 53.01624129930394,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 30.899900563473647,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 4.416639045409347,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 0.20715942989724892,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 7.55717600265164,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 59.951939012263836,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 30.294995028173684,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 1.9887305270135898,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 20.152469340404373,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 72.37321842890289,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 7.134570765661252,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.3397414650314882,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 4.482930062976466,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 74.2625124295658,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 19.53099105071263,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 1.7235664567451112,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 8.463832317009278,
+          "C_source": 0.4761991946950813,
+          "T_trigger": 0.783684191257197,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 24.922526350669806,
+            "peak_m3s": 317.8709468395354,
+            "volume_m3": 634787.4237756957,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F2",
+          "catchment_km2": 99.35503622209825,
+          "C_source": 0.6949707102910789,
+          "T_trigger": 1.0,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 64.76958310653853,
+            "peak_m3s": 1435.8022615479194,
+            "volume_m3": 7451627.7166573685,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F3",
+          "catchment_km2": 2.9446210276345104,
+          "C_source": 0.30228509374247303,
+          "T_trigger": 0.6162316236103259,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 21.055608808780942,
+            "peak_m3s": 130.8993393112662,
+            "volume_m3": 220846.5770725883,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F4",
+          "catchment_km2": 2.49291360516091,
+          "C_source": 0.28808249078505554,
+          "T_trigger": 0.5629101708661793,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 23.645030805015125,
+            "peak_m3s": 98.68319283118477,
+            "volume_m3": 186968.52038706825,
+            "curve_number": null
+          }
+        }
+      ]
+    },
+    {
+      "complex_id": 5,
+      "class_area_km2": {
+        "absolute": [
+          0.10440407406229452,
+          1.0206030913436546,
+          0.5603728873139481,
+          0.14488728645379648,
+          0.0
+        ],
+        "relative": [
+          0.04261390778052837,
+          0.38636609721012394,
+          0.6008560997054501,
+          0.7727321944202479,
+          0.027699040057343444
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.8504128857901572,
+          "top20_overlap": 0.5334323922734027,
+          "hand_median_m": 0.0,
+          "share_hand_lt5m": 0.7151726814124951
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 5.21435546875,
+          "share_hand_lt5m": 0.4086146682188591
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9424519062988586,
+          "top20_overlap": 0.7947826086956522,
+          "hand_median_m": 8.484130859375,
+          "share_hand_lt5m": 0.30578191695770274
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.8332901414416969,
+          "top20_overlap": 0.645933014354067,
+          "hand_median_m": 10.8494873046875,
+          "share_hand_lt5m": 0.21808304229724484
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.8346590735929257,
+          "top20_overlap": 0.6125,
+          "hand_median_m": 16.623046875,
+          "share_hand_lt5m": 0.12689173457508732
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 5.70430733410943,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 55.76251455180442,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 30.61699650756694,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 7.916181606519208,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 2.3282887077997674,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 21.109817617384554,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 32.82887077997672,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 42.21963523476911,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 1.5133876600698486,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 57.43112145906092,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 42.18083042297245,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.38804811796662786,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 39.3092743500194,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 56.92665890570431,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 3.7640667442762905,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 2.5774311889256243,
+          "C_source": 0.6094555071060411,
+          "T_trigger": 0.6127649444578408,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 18.771648197301467,
+            "peak_m3s": 128.5169830308876,
+            "volume_m3": 193307.33916942182,
+            "curve_number": null
+          }
+        }
+      ]
+    },
+    {
+      "complex_id": 6,
+      "class_area_km2": {
+        "absolute": [
+          0.0,
+          0.8643520961483838,
+          0.7911982211251435,
+          0.9304036532082028,
+          0.024147881075632746
+        ],
+        "relative": [
+          0.001420463592684279,
+          0.24147881075632746,
+          0.9410571301533349,
+          1.389923625441567,
+          0.03622182161344912
+        ]
+      },
+      "hand_sensitivity": [
+        {
+          "threshold_km2": 0.05,
+          "corr": 0.9536074194709473,
+          "top20_overlap": 0.9496021220159151,
+          "hand_median_m": 0.0,
+          "share_hand_lt5m": 0.6165986394557823
+        },
+        {
+          "threshold_km2": 0.25,
+          "corr": 1.0,
+          "top20_overlap": 1.0,
+          "hand_median_m": 4.6962890625,
+          "share_hand_lt5m": 0.5091156462585034
+        },
+        {
+          "threshold_km2": 0.5,
+          "corr": 0.9637759967665578,
+          "top20_overlap": 0.9066147859922179,
+          "hand_median_m": 6.947509765625,
+          "share_hand_lt5m": 0.4337414965986395
+        },
+        {
+          "threshold_km2": 1.0,
+          "corr": 0.902852643360728,
+          "top20_overlap": 0.7604790419161677,
+          "hand_median_m": 11.224609375,
+          "share_hand_lt5m": 0.33034013605442175
+        },
+        {
+          "threshold_km2": 2.0,
+          "corr": 0.7544105939253438,
+          "top20_overlap": 0.7458432304038005,
+          "hand_median_m": 18.91259765625,
+          "share_hand_lt5m": 0.22993197278911565
+        }
+      ],
+      "validation": [
+        {
+          "map": "risk_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 33.1156462585034,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 30.312925170068027,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 35.64625850340136,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.9251700680272109,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "risk_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 0.05442176870748299,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 9.251700680272108,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 36.054421768707485,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 53.25170068027211,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 1.3877551020408163,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_abs",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 16.13605442176871,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 83.0204081632653,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.8435374149659863,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        },
+        {
+          "map": "worst_cloudburst_rel",
+          "flooded_cells": 0,
+          "covered_pct": 0.0,
+          "flooded_share_pct": 0.0,
+          "auc_roc": NaN,
+          "auc_success": NaN,
+          "mean_rank_pct": null,
+          "classes": [
+            {
+              "area_pct": 11.945578231292517,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 86.12244897959184,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 1.9319727891156462,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            },
+            {
+              "area_pct": 0.0,
+              "flooded_pct": 0.0
+            }
+          ]
+        }
+      ],
+      "feeders": [
+        {
+          "name": "F1",
+          "catchment_km2": 2.134246548008129,
+          "C_source": 0.5632463742087946,
+          "T_trigger": 0.6238490185744942,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 14.657338833624191,
+            "peak_m3s": 136.29041339707274,
+            "volume_m3": 160068.49110060968,
+            "curve_number": null
+          }
+        },
+        {
+          "name": "F2",
+          "catchment_km2": 1.5049811764489938,
+          "C_source": 0.5602077283026138,
+          "T_trigger": 0.5784801620223704,
+          "G_glof": 0.0,
+          "event": {
+            "runoff_mm": 75.0,
+            "tp_min": 13.144277149966793,
+            "peak_m3s": 107.16925435186955,
+            "volume_m3": 112873.58823367453,
+            "curve_number": null
+          }
+        }
+      ]
+    }
+  ],
+  "class_breaks": [
+    0.2,
+    0.4,
+    0.55,
+    0.7
+  ],
+  "note": "Scores are relative susceptibility (0-1), not calibrated probabilities or inundation depths. 'abs' maps use fixed physical scales (comparable between fans); 'rel' maps are normalised inside each fan."
+}

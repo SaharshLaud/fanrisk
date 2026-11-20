@@ -1,0 +1,22 @@
+# Dharali 2025, FULLY AUTOMATIC run: the default apex detector alone, nothing given by hand.
+# Result on 21 Nov 2026: 0 fans. The 'openness' detector needs the horizon to open to at least half of 16 directions within 1 km
+# after a confined reach; in the Bhagirathi gorge it peaks at 7 near the Kheer Gad mouth and closes again at the confluence.
+# This is a known limitation of the detector in narrow trunk valleys; site.toml shows the documented fallback (one manual apex).
+[site]
+name = "Dharali - fully automatic run (no manual apex)"
+dem = "../../data/dharali_2025/dem.tif"
+output_dir = "../../runs/dharali_2025_auto"
+region_profile = "humid_mountain"
+
+[stages]
+risk = true
+hecras_handoff = false
+
+[runoff]
+curve_number = 80
+
+[validation]
+flood_points = "../../data/validation/dharali_2025/dharali_points.geojson"
+
+[targets]
+mode = "all"

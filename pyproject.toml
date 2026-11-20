@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fanrisk"
+version = "0.2.0"
+description = "Flash-flood risk on alluvial fans from a DEM: automatic fans and catchments, AHP risk, HEC-RAS 2D model and batch runs, exposure, validation, web map"
+authors = [{name = "Akhtar Hussain"}, {name = "Saharsh Laud"}]
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+geo = ["rasterio", "geopandas", "matplotlib", "scipy"]
+hecras = ["ras-commander[compute]==0.113.0", "psutil", "h5py", "scipy"]
+
+[project.scripts]
+fanrisk = "fanrisk.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fanrisk*"]
+
+[tool.setuptools.package-data]
+fanrisk = ["profiles/*.toml", "cases/*.toml", "templates/*.toml", "templates/hecras/*", "templates/hecras/Land Classification/*"]

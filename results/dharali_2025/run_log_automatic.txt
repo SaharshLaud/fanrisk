@@ -1,0 +1,25 @@
+[   0.2s] fanrisk 0.1.0 - site 'Dharali - fully automatic run (no manual apex)' - file backend: rasterio
+[   0.2s] Region profile: humid_mountain - Soil and vegetation hold back part of the rain: runoff from the SCS curve number, wet antecedent conditions.
+[   0.2s] Settings that differ from the method defaults:
+[   0.2s]   CN_AMC                     = 3                      <- region profile 'humid_mountain'
+[   0.2s]   CURVE_NUMBER               = 80                     <- site.toml [runoff] curve_number
+[   0.2s]   RAS_N_CHANNEL              = 0.06                   <- region profile 'humid_mountain'
+[   0.2s]   RAS_N_FAN                  = 0.06                   <- region profile 'humid_mountain'
+[   0.2s]   RUNOFF_METHOD              = scs_cn                 <- region profile 'humid_mountain'
+[   0.2s] NOTE: no rainfall given: the maps show susceptibility with the storm trigger at its worst case (1.0), and no peak flows
+[   0.2s] DEM is in degrees - warping to EPSG:32644 at 28.6 m ...
+[   0.3s] DEM: dem.tif  (EPSG:32644, 749 x 751 cells of 28.6 m)
+[   0.3s] Hydrological analysis: sink filling + flow directions (751 x 749 cells of 28.6 m) ...
+[   1.0s] Flow accumulation ...
+[   1.1s]   drainage network: 10928 channel cells (threshold 611 cells = 0.50 km2)
+[   1.1s] Fan surface (channels filled) and slope ...
+[   1.7s] Apex detection (valley mouths): 0 found
+[   1.7s] Delineating fans for 0 apexes ...
+[   1.7s] Done: 0 fans accepted, 0 candidates rejected
+[   1.7s] Coalescence: 0 fans -> 0 fan complexes
+[   1.7s] Writing fan outputs to C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025_auto\fans
+[   2.2s] Vector layers -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025_auto\fans\fanrisk.gpkg
+[   2.2s] RESULTS: 0 fans in 0 fan complexes
+[   2.2s]   FAN COMPLEXES (merged flood plains / bajadas) and ALL catchments feeding them
+[   2.2s]   id   fans     area km2   catch km2  Melton  flags
+[   2.2s] Done. Open C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\dharali_2025_auto in QGIS: the risk GeoTIFFs load with their colours.

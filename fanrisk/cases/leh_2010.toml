@@ -1,0 +1,31 @@
+# Validation case: one documented flood, used to TEST the tool. Nothing in here changes how the maps are made,
+# except the observed hydrograph, and only when site.toml says [hecras] inflow = "observed" (a hindcast of this event).
+[case]
+name = "Leh cloudburst flood, 5-6 August 2010 (Sabu stream to Choglamsar)"
+sources = [
+  "Thayyen et al. (2013), Natural Hazards, doi:10.1007/s11069-012-0464-2 (peak flow, depth and velocity at the Sabu section)",
+  "Bhatt et al. (2011), Geomatics, Natural Hazards and Risk (flood extent and widths at Choglamsar from satellite images)",
+]
+tolerance = 0.35                 # +-35 %: the uncertainty the source gives for its peak flows
+
+[observed_hydrograph]            # triangular; peak from Thayyen et al., timing as used in the project
+peak_m3s = 1070
+tp_min = 23
+base_min = 60
+
+[[probes]]                       # depth / speed measured at one section; chainage = distance along the handoff centreline from the inflow
+name = "Sabu ST1 (Thayyen et al. 2013)"
+chainage_m = 300.0
+offset_m = 0.0
+depth_m = 5.2
+velocity_ms = 8.3
+
+# Flood widths from Bhatt et al. (2011) at Choglamsar: about 130 m upstream, 400 m mid-reach, 650 m downstream.
+# Measure the chainages on centerline.geojson and uncomment:
+# [[widths]]
+# chainage_m = 2900
+# width_m = 130
+
+[files]                          # optional observed data (paths relative to site.toml)
+flood_footprint = ""             # polygons of the observed flooded area
+flood_points = ""                # points of flooded / damaged places

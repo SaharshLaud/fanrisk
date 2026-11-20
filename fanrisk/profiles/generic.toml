@@ -1,0 +1,13 @@
+# Region profile: generic (no assumption about climate or ground).
+# A profile holds STARTING ASSUMPTIONS for a type of terrain. It is not a calibration: check every number against local knowledge.
+[profile]
+name = "generic"
+description = "No regional assumption. All rain runs off (worst case) until you describe the ground in [runoff] of site.toml."
+use_when = "You do not know the region yet, or you want the most cautious screening."
+
+[settings]
+RUNOFF_METHOD = "coefficient"
+RUNOFF_COEFF = 1.0            # worst case: every millimetre of rain runs off
+RAS_N_CHANNEL = 0.05          # Manning n, mountain channel with cobbles / boulders (Chow 1959: 0.04-0.07)
+RAS_N_FAN = 0.035             # bare or sparsely vegetated fan surface
+RAS_N_BUILT = 0.10            # built-up ground

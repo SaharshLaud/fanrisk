@@ -1,0 +1,6 @@
+{"type": "FeatureCollection", "name": "dharali_2025_points",
+ "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+ "features": [
+  {"type": "Feature", "properties": {"name": "Dharali debris deposit (centre of the NRSC deposition map)", "source": "NRSC/NDEM 2025, map frame 31 02'21\"-31 02'36\" N, 78 46'25\"-78 47'05\" E. Kumar et al. 2026 give 31.0407 N, 78.7972 E for the village, about 1.4 km east of the mapped deposit.", "holdout": 0},
+   "geometry": {"type": "Point", "coordinates": [78.7792, 31.0412]}}
+ ]}
