@@ -24,6 +24,18 @@ Outputs of our own runs, kept so you can see what fanrisk produces before you in
 | `viewer.html`, `risk/` | AHP risk map of the Kheer Gad fan |
 | `run_log_*.txt` | Run logs |
 
+## Kedarnath 2013 (`kedarnath_2013/`)
+
+| File | What it shows |
+| --- | --- |
+| `event_check_automatic.txt` | Fully automatic run: the town lands on a 3 km2 side-stream fan; the trunk apex is missed |
+| `event_check_manual_apex.txt` | With one manual apex on the Mandakini: catchment 18.6 km2, Melton 0.72, debris flow |
+| `hecras_R04/`, `hecras_R05/` | HEC-RAS runs with the tool's own storm (109 m3/s clear water; 199 m3/s bulked): max depth, max speed, hazard class, `readback.log`, and `compare_map.png` / `hotspots.kml` comparing them with the AHP map |
+| `hecras_batch_summary.csv` | Run times, volume error, wet area, AHP-vs-HEC-RAS AUC per run |
+| `hecras_model_area.geojson` | The 2D flow area the tool chose |
+| `viewer.html`, `risk/` | Web map and AHP risk map of the Mandakini fan complex |
+| `run_log_*.txt` | Run logs |
+
 ## Figures (`figures/`)
 
 | Figure | What it shows |
@@ -34,5 +46,6 @@ Outputs of our own runs, kept so you can see what fanrisk produces before you in
 | `ahp_sensitivity_2010.png` | Monte Carlo on the AHP judgements and one-at-a-time weight changes |
 | `channel_burn_sections.png`, `channel_burn_results.png` | Burning the channel 0, 2 or 4 m into the terrain; 2 m fits 2010 best |
 | `exposure_map_leh2010.png` | Buildings and facilities hit, AHP vs HEC-RAS |
+| `kedarnath_2013_R04.png` | Kedarnath: AHP risk, HEC-RAS hazard rating and their agreement (run R04) |
 
 Background imagery in the figures and web maps: (c) Esri, Maxar, Earthstar Geographics.

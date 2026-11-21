@@ -8,7 +8,7 @@
 - the buildings, roads, schools and hospitals in harm's way;
 - scores against an observed flood, and a web map you can open in any browser.
 
-It was built and tested on the **August 2010 Leh cloudburst** (Sabu–Choglamsar fan, Ladakh). It was then run with no tuning on a second event, the **5 August 2025 Dharali debris flow** (Uttarkashi, Uttarakhand).
+It was built and tested on the **August 2010 Leh cloudburst** (Sabu–Choglamsar fan, Ladakh). It was then run with no tuning on two more events: the **5 August 2025 Dharali debris flow** (Uttarkashi) and the **June 2013 Kedarnath flood** (Rudraprayag), where the whole chain including HEC-RAS was run with default settings to check that nothing is tuned to Leh.
 
 ICTD 2026–27 project, IIT Delhi — Akhtar Hussain and Saharsh Laud (guide: Prof. Aaditeshwar Seth).
 
@@ -58,6 +58,25 @@ Open `results/leh_2010/viewer.html` in a browser for the interactive map. You ca
 | Risk within 250 m of the deposit | 46% of cells high or above, highest score 0.77 | — |
 
 For Leh the same defaults give a clear-water flood, which is also correct.
+
+## What it found for Kedarnath 2013 (bias test, full chain with HEC-RAS)
+
+Default humid-mountain settings, the tool's own SCS storm hydrograph (210 mm in 12 h at Chorabari, Singh et al. 2015), no channel burn, default model size, the HEC-RAS template re-fitted to a new UTM zone (44N). Nothing taken from Leh.
+
+| Check | Kedarnath | Leh, for comparison |
+| --- | --- | --- |
+| Trunk fan found fully automatically | **no** (needs one manual apex, as at Dharali) | yes |
+| Catchment at the apex; at the town | 18.6 km²; 38.6 km² (reaches the published 67 km² valley area 5.5 km downstream) | — |
+| Melton ruggedness; flow type | 0.72; debris flow | 0.30; clear-water flood |
+| Peak inflow, R04 clear water; R05 bulked for debris | 109; 199 m³/s | 1,070 m³/s (observed) |
+| Depth and speed through the town | 1.6–2.6 m, 5–6 m/s (extreme hazard) | — |
+| Water against the model edge; volume error | none; < 0.01% | none |
+| HEC-RAS significant/extreme cells that the AHP rates high or very high | **89%** | — |
+| AUC of the AHP risk map against the simulated flood | **0.73–0.75** | 0.83–0.86 |
+
+The AHP flags all seven feeders of the fan complex, while HEC-RAS simulates one, which explains most of the lower agreement. The test found one Leh-only step in the code: the outflow boundary was lengthened along a single edge of the model outline. It now follows the outline round corners (`fanrisk/ras/geometry.py`). No AHP weight or HEC-RAS parameter was changed. The inflow is rain only; the Chorabari lake outburst is not modelled, so these flows are a lower bound.
+
+![Kedarnath 2013](results/figures/kedarnath_2013_R04.png)
 
 ---
 
@@ -115,6 +134,8 @@ On Windows, double-click the batch files in this folder. Each one writes a `*_st
 | `run_burn_test.bat` | Experiment: channel burned 0, 2 and 4 m into the terrain | yes | about 10 min |
 | `run_roughness_test.bat` | Experiment: Manning's n = 0.04 and 0.08 | yes | about 8 min |
 | `run_dharali.bat` | Second event: downloads the DEM, then runs automatic and manual-apex checks | no | 2 min |
+| `run_kedarnath.bat` | Third event: downloads the DEM, then runs automatic and manual-apex checks | no | 2 min |
+| `run_kedarnath_hecras.bat` | Kedarnath bias test: HEC-RAS model built in a new UTM zone, runs R04 and R05, scores | yes | about 1 h |
 
 On Linux or macOS, run the same `python -m fanrisk ...` lines from the `.bat` files. HEC-RAS itself needs Windows.
 
@@ -126,7 +147,7 @@ fanrisk/            the package: engine (stages 1-2), pipeline, ras/ (HEC-RAS fi
   cases/            observations of documented floods (leh_2010), used only for testing
   templates/hecras/ the minimal HEC-RAS 7.0.2 project that 'hecras fit' re-targets
 tools/              get_dem, get_ms_buildings, check_event, case_summary
-examples/           leh_2010 (with experiments/), dharali_2025
+examples/           leh_2010 (with experiments/), dharali_2025, kedarnath_2013
 data/               Leh DEM, the 2010 footprint and damage points, OpenStreetMap extract
 results/            outputs of our runs: figures, web maps, scores, exposure lists
 tests/selftest.py
@@ -143,9 +164,10 @@ The run log lists every setting that differs from the defaults and where it came
 
 ## Limitations
 
-- **Narrow trunk valleys.** The apex detector looks for a channel leaving a confined valley onto open ground. Where the main valley is itself a gorge (Dharali), it finds nothing. Give the apex by hand (`manual_apexes`).
+- **Narrow trunk valleys.** The apex detector looks for a channel leaving a confined valley onto open ground. Where the main valley is itself a gorge (Dharali, Kedarnath), it misses the trunk fan. Give the apex by hand (`manual_apexes`).
 - **Terrain resolution.** A 27–30 m DEM is about as wide as the channels. HEC-RAS uses a channel burned 2 m into the terrain, chosen by testing 0, 2 and 4 m against the 2010 flood.
 - **Clear water only.** The HEC-RAS runs use clear-water flow. Debris flows (Bingham rheology) are not run, and the Dharali check stops at the AHP stage.
+- **Lake outbursts.** Glacial-lake outburst floods are not modelled; at Kedarnath the inflow is rain only.
 - **No structures.** Road embankments, culverts and bridges are not in the terrain.
 - **Uniform roughness.** HEC-RAS uses one Manning's n (0.06) for the whole area.
 - **Maps from the HDF file.** If HEC-RAS's own map export is blocked (for example by Windows Defender), maps are made directly from the results file. Depths agree with HEC-RAS's maps within 0.11 m on average. Compare runs made the same way.
@@ -161,6 +183,7 @@ The run log lists every setting that differs from the defaults and where it came
 | 2010 footprint and damage points | Traced by us from Bhatt et al. (2011), Fig. 7 |
 | Leh hydrograph and Sabu observations | Thayyen et al. (2013), *Natural Hazards*, doi:10.1007/s11069-012-0464-2 |
 | Dharali facts | Kumar et al. (2026), *Current Science* 130(3), 229–238; ISRO (2025); NRSC/NDEM (2025) |
+| Kedarnath facts | Singh et al. (2015), *Natural Hazards and Earth System Sciences* 15, 1597–1601, doi:10.5194/nhess-15-1597-2015 |
 | Background imagery in the figures and web maps | © Esri, Maxar, Earthstar Geographics (Esri World Imagery) |
 | HEC-RAS | US Army Corps of Engineers; driven through [ras-commander](https://github.com/gpt-cmdr/ras-commander) |
 

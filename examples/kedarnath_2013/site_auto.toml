@@ -1,0 +1,34 @@
+# Kedarnath 2013, FULLY AUTOMATIC run: the default apex detector alone, nothing given by hand. See site.toml for the event notes.
+# Kedarnath (Rudraprayag, Uttarakhand), 16-17 June 2013: extreme rain plus the Chorabari lake outburst sent a flood and debris flow
+# through Kedarnath town and down the Mandakini to Rambara and Gaurikund. Third test event, and the first one run THROUGH HEC-RAS
+# outside Leh - to check that nothing in the tool is biased toward Leh. Nothing is tuned: fresh DEM (tools/get_dem.py), every setting
+# the default of the humid_mountain profile, the tool's own SCS hydrograph from the documented rain (no Leh hydrograph, no channel burn).
+# Published facts used to check it (Singh et al. 2015, NHESS 15:1597-1601):
+#   town at ~3,583 m; Kedarnath valley catchment ~67 km2 (23% glaciated); 210 mm in 12 h and 325 mm in 24 h at Chorabari;
+#   both banks of the Mandakini washed away and houses destroyed in Kedarnath, Rambara and Gaurikund.
+# NOT modelled: the lake outburst itself (only rain runoff) - so modelled flows are a LOWER bound on 17 June.
+# APEX_MODE "both": whatever the automatic detector finds, plus one manual apex where the Mandakini leaves the moraine trough
+# above the town (the documented fallback, as at Dharali). Run 'run_kedarnath.bat'.
+[site]
+name = "Kedarnath - fully automatic run (no manual apex)"
+dem = "../../data/kedarnath_2013/dem.tif"
+output_dir = "../../runs/kedarnath_2013_auto"
+region_profile = "humid_mountain"
+
+[stages]
+risk = true
+hecras_handoff = false             # step 1 = maps only; site_hecras.toml (step 2) adds the HEC-RAS model of the fan that holds the town
+
+[storm]
+rainfall_mm = 210                  # Chorabari raingauge, 17:00 15 June - 05:00 16 June 2013 (Singh et al. 2015)
+duration_min = 720
+
+[runoff]
+curve_number = 80
+
+[validation]
+flood_points = "../../data/validation/kedarnath_2013/kedarnath_points.geojson"
+
+[targets]
+mode = "all"
+

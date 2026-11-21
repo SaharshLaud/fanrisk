@@ -1,0 +1,201 @@
+{
+  "area_km2": {
+    "both high": 0.13700956313786802,
+    "HEC-RAS only: AHP rates it lower": 0.016408330914714733,
+    "AHP only: this flood does not reach it": 0.47748242961819876,
+    "wet, both low": 0.004102082728678683
+  },
+  "crosstab_km2": {
+    "rows": [
+      "very low",
+      "low",
+      "moderate",
+      "high",
+      "very high"
+    ],
+    "cols": [
+      "dry",
+      "low",
+      "moderate",
+      "significant",
+      "extreme"
+    ],
+    "values": [
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.2732,
+        0.0,
+        0.0016,
+        0.0008,
+        0.0
+      ],
+      [
+        0.2839,
+        0.0,
+        0.0,
+        0.0025,
+        0.0123
+      ],
+      [
+        0.2182,
+        0.0,
+        0.0025,
+        0.0189,
+        0.0582
+      ],
+      [
+        0.2593,
+        0.0,
+        0.0,
+        0.0082,
+        0.0517
+      ]
+    ]
+  },
+  "hit_rate_of_ahp_high_pct": 22.606382978723403,
+  "share_of_ras_high_rated_high_by_ahp_pct": 89.3048128342246,
+  "hotspots": [
+    {
+      "rank": 1,
+      "x": 314812.3495428831,
+      "y": 3401995.84883716,
+      "lon": 79.06564906147898,
+      "lat": 30.736478966958355,
+      "chainage_km": 1.0783261189984352,
+      "area_m2": 18869.580551921943,
+      "hazard_rating_max": 6.640323078786025,
+      "hazard_class": "extreme",
+      "depth_max_m": 1.5714095830917358,
+      "speed_max_ms": 5.628936767578125,
+      "arrival_min": null,
+      "ahp_risk": 0.591865062713623,
+      "ahp_class": "high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 2,
+      "x": 314783.706628476,
+      "y": 3401852.6342651243,
+      "lon": 79.06537583245951,
+      "lat": 30.73518293693162,
+      "chainage_km": 1.2233578300072967,
+      "area_m2": 20510.413643393418,
+      "hazard_rating_max": 11.8675611793808,
+      "hazard_class": "extreme",
+      "depth_max_m": 2.1134607791900635,
+      "speed_max_ms": 5.098513126373291,
+      "arrival_min": null,
+      "ahp_risk": 0.532174289226532,
+      "ahp_class": "moderate",
+      "agreement": "HEC-RAS only: AHP rates it lower"
+    },
+    {
+      "rank": 3,
+      "x": 314955.56411491893,
+      "y": 3401107.9184905384,
+      "lon": 79.06730413369664,
+      "lat": 30.728493500800955,
+      "chainage_km": 1.9884834185371216,
+      "area_m2": 18049.16400618621,
+      "hazard_rating_max": 11.190069479231852,
+      "hazard_class": "extreme",
+      "depth_max_m": 2.781665563583374,
+      "speed_max_ms": 6.1582112312316895,
+      "arrival_min": null,
+      "ahp_risk": 0.6048943996429443,
+      "ahp_class": "high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 4,
+      "x": 315012.84994373325,
+      "y": 3400477.7743735807,
+      "lon": 79.06801554578053,
+      "lat": 30.722819478290386,
+      "chainage_km": 2.621355003328914,
+      "area_m2": 18049.16400618621,
+      "hazard_rating_max": 12.926746276230006,
+      "hazard_class": "extreme",
+      "depth_max_m": 2.112736463546753,
+      "speed_max_ms": 6.92877721786499,
+      "arrival_min": null,
+      "ahp_risk": 0.6735188961029053,
+      "ahp_class": "high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 5,
+      "x": 315070.13577254757,
+      "y": 3400248.6310583237,
+      "lon": 79.06865475313276,
+      "lat": 30.720761858449322,
+      "chainage_km": 2.856876709764162,
+      "area_m2": 9844.99854882884,
+      "hazard_rating_max": 14.757852015087565,
+      "hazard_class": "extreme",
+      "depth_max_m": 3.027397632598877,
+      "speed_max_ms": 7.210994243621826,
+      "arrival_min": null,
+      "ahp_risk": 0.6984856128692627,
+      "ahp_class": "high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 6,
+      "x": 315156.064515769,
+      "y": 3399962.201914252,
+      "lon": 79.06960321382796,
+      "lat": 30.718192050516482,
+      "chainage_km": 3.155973147695632,
+      "area_m2": 9844.99854882884,
+      "hazard_rating_max": 19.705390715654858,
+      "hazard_class": "extreme",
+      "depth_max_m": 2.2921321392059326,
+      "speed_max_ms": 8.847271919250488,
+      "arrival_min": null,
+      "ahp_risk": 0.8964453935623169,
+      "ahp_class": "very high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 7,
+      "x": 315184.7074301762,
+      "y": 3399618.486941366,
+      "lon": 79.06996395669982,
+      "lat": 30.715096710086883,
+      "chainage_km": 3.502336214207172,
+      "area_m2": 10665.415094564578,
+      "hazard_rating_max": 16.937983087373595,
+      "hazard_class": "extreme",
+      "depth_max_m": 2.1208040714263916,
+      "speed_max_ms": 8.090792655944824,
+      "arrival_min": null,
+      "ahp_risk": 0.9290310144424438,
+      "ahp_class": "very high",
+      "agreement": "both high"
+    },
+    {
+      "rank": 8,
+      "x": 314926.92120051174,
+      "y": 3399188.843225259,
+      "lon": 79.06735046172125,
+      "lat": 30.711181936380665,
+      "chainage_km": 4.008294960854214,
+      "area_m2": 9024.582003093105,
+      "hazard_rating_max": 7.099356541859379,
+      "hazard_class": "extreme",
+      "depth_max_m": 1.3247753381729126,
+      "speed_max_ms": 4.980798721313477,
+      "arrival_min": null,
+      "ahp_risk": 0.7206870913505554,
+      "ahp_class": "very high",
+      "agreement": "both high"
+    }
+  ]
+}

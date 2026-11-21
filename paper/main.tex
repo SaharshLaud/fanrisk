@@ -26,7 +26,7 @@
 \usepackage{xcolor}
 \graphicspath{{figures/}}
 
-\title{From a DEM to a Warning Map: An Open, Reproducible Pipeline for Flash-Flood Risk on Himalayan Alluvial Fans, Validated on Leh 2010 and Dharali 2025}
+\title{From a DEM to a Warning Map: An Open, Reproducible Pipeline for Flash-Flood Risk on Himalayan Alluvial Fans, Validated on Leh 2010 and Tested on Dharali 2025 and Kedarnath 2013}
 
 \author{Akhtar Hussain}
 \affiliation{%
@@ -51,7 +51,7 @@ We present \texttt{fanrisk}, an open Python pipeline that starts from a freely a
 
 Against the 2010 flood footprint at Choglamsar, the AHP risk map reaches an AUC of 0.85 (POD 0.59, FAR 0.16). The HEC-RAS model reaches an AUC of 0.77 and reproduces the observed depth at the gauged Sabu section within 3\%. The AHP result is stable across 423 random perturbations of the expert judgements (AUC 0.82--0.85). The hydraulic result is stable across Manning's $n$ from 0.04 to 0.08 (AUC 0.76--0.77). In the hindcast, 541 present-day buildings are flooded 0.3\,m or deeper, 200 of them in the extreme hazard class.
 
-Run without any tuning on the 2025 Dharali debris flow (Uttarakhand), the pipeline does not find the fan on its own. Given one manual apex, it measures the catchment within 8\% of the published value, classifies the event correctly as a debris flow, and marks the area around the deposit as high risk. We close with an impact-assessment design for the District Disaster Management Authority, panchayats and households, and release the tool, data and results on GitHub.
+Run without any tuning on the 2025 Dharali debris flow (Uttarakhand), the pipeline does not find the fan on its own. Given one manual apex, it measures the catchment within 8\% of the published value, classifies the event correctly as a debris flow, and marks the area around the deposit as high risk. To check that nothing in the tool is tuned to Leh, we also ran the full chain, HEC-RAS included, on the 2013 Kedarnath flood with default settings and the tool's own storm hydrograph. The model runs stably in a new map zone and sends the flood through the town at 1.6--2.6\,m and 5--6\,m/s. Of the cells HEC-RAS rates significant or extreme, 89\% are high risk on the AHP map; the AHP's AUC against the simulated flood is 0.73--0.75, against 0.83--0.86 at Leh. The test exposed one hidden Leh assumption in the code, which we fixed. We close with an impact-assessment design for the District Disaster Management Authority, panchayats and households, and release the tool, data and results on GitHub.
 \end{abstract}
 
 \keywords{flash flood, alluvial fan, AHP, HEC-RAS 2D, Ladakh, Himalaya, early warning, reproducibility, ICTD}
@@ -68,7 +68,7 @@ We built \texttt{fanrisk} to close that gap for the people who make siting and e
 \begin{enumerate}
   \item An \textbf{automated chain from a DEM to validated maps}: fan and catchment identification, a two-level AHP that separates catchment source susceptibility from fan hazard and exposure, and a HEC-RAS 2D model fitted, run in batch and read back without the GUI (Section~\ref{sec:method}).
   \item \textbf{Validation against an observed flood}: a footprint and 648 damaged houses traced from satellite damage mapping of the 2010 event, scored with AUC, POD, FAR and CSI. This is supported by sensitivity tests on the AHP judgements, terrain conditioning and roughness, and a cross-check against published values (Section~\ref{sec:results}).
-  \item A \textbf{transfer test on a second event}, Dharali 2025, in a different climate and valley type, with no tuning. It reports where the pipeline fails as well as where it works (Section~\ref{sec:dharali}).
+  \item \textbf{Transfer tests on two more events} in a different climate and valley type, with no tuning: Dharali 2025 (Section~\ref{sec:dharali}) and Kedarnath 2013, where the whole chain including HEC-RAS is run to test for bias toward Leh (Section~\ref{sec:kedarnath}). They report where the pipeline fails as well as where it works.
   \item An \textbf{exposure layer and a delivery format} for non-specialists, and an \textbf{impact-assessment design} with indicators and survey instruments (Section~\ref{sec:impact}).
 \end{enumerate}
 The code, data, example runs and results are public at \url{https://github.com/SaharshLaud/fanrisk}.
@@ -92,6 +92,8 @@ The code, data, example runs and results are public at \url{https://github.com/S
 \end{itemize}
 
 \textbf{Dharali 2025 (transfer test).} On 5 August 2025 a debris flow from the Kheer Gad (Khirganga) buried Dharali village on its fan at the Bhagirathi confluence. At least 60 people died or went missing. Published values: catchment 17\,km$^2$, Melton ruggedness 0.8, deposit about 18--20\,ha (about 750 $\times$ 450\,m) \cite{kumar2026,isro2025}. The DEM was downloaded fresh by the tool (Copernicus GLO-30, two tiles).
+
+\textbf{Kedarnath 2013 (bias test).} On 16--17 June 2013, 325\,mm of rain in 24\,h at Chorabari and the outburst of Chorabari Lake, 2\,km upstream, sent a flood and debris down the Mandakini through Kedarnath town (3,583\,m) to Gaurikund, 16\,km downstream. Both banks were washed away and thousands died. The Kedarnath valley covers about 67\,km$^2$, 23\% of it glaciated \cite{singh2015}. No flood footprint or measured depth is published for the town, so we use this event to test the pipeline's behaviour, not its accuracy.
 
 \textbf{Exposure.} Buildings come from Microsoft Global ML Building Footprints (25,384 in the Leh study area) \cite{msbuildings}. OpenStreetMap lists only 805 buildings there, 17 of them inside the surveyed window, against 648 damaged houses in 2010. Roads (270\,km) and 29 critical facilities come from OpenStreetMap.
 
@@ -254,6 +256,41 @@ The tool's documented fallback is one manual apex. We placed it where the Khirga
 One published coordinate for Dharali lies about 1.4\,km east of the mapped deposit, so event checks should use mapped extents rather than village points.
 
 % =====================================================================================
+\section{Bias Test with HEC-RAS: Kedarnath 2013}\label{sec:kedarnath}
+\begin{table}[t]
+  \caption{Kedarnath 2013: default settings of the humid-mountain profile, the tool's own SCS hydrograph of 210\,mm in 12\,h, no channel burn. Leh values are the R04 runs of Table~\ref{tab:burn} read back the same way.}
+  \label{tab:kedarnath}
+  \small
+  \begin{tabular}{@{}p{0.44\columnwidth}cc@{}}
+    \toprule
+    Check & Kedarnath & Leh \\
+    \midrule
+    Trunk fan found automatically & no & yes \\
+    Catchment: apex; town & 18.6; 38.6\,km$^2$ & -- \\
+    Melton ruggedness; flow type & 0.72; debris & 0.30; clear \\
+    Peak inflow, m$^3$/s (R04; R05) & 109; 199 & 1,070 \\
+    Depth; speed in the town & 1.6--2.6\,m; 5--6\,m/s & -- \\
+    Wet cells at the model edge & 0 & 0 \\
+    Severe cells, AHP high+ & 89\% & -- \\
+    AUC, AHP vs HEC-RAS & 0.73--0.75 & 0.83--0.86 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.86\textwidth]{figures/kedarnath_2013_R04.png}
+  \caption{Kedarnath 2013, run R04 (clear water, 109\,m$^3$/s). (a) AHP risk on the Mandakini fan complex. (b) HEC-RAS hazard rating. (c) Agreement; hotspots 1--2 lie in Kedarnath town. Blue cells are high on the AHP map but outside this one feeder's flood. Settings are the tool's defaults; nothing is copied from Leh.}
+  \label{fig:kedarnath}
+\end{figure*}
+The Leh results could hide choices that only work there: the arid profile, the observed hydrograph, the 2\,m channel burn, the reach of the model. We therefore ran the full chain on Kedarnath with none of them (Table~\ref{tab:kedarnath}). The DEM was downloaded fresh; the profile is humid-mountain; the inflow is the tool's SCS hydrograph of the 210\,mm that fell in 12\,h at Chorabari \cite{singh2015}; there is no burn; the reach and width are the defaults; the bundled template was re-fitted to UTM zone 44N (Leh is 43N).
+
+\textbf{Stages 1--2.} As at Dharali, the automatic detector misses the trunk apex (by 1.5\,km) and puts the town on a 3\,km$^2$ side-stream fan; one manual apex on the Mandakini fixes this. The catchment is 18.6\,km$^2$ at the apex and 38.6\,km$^2$ below the Saraswati confluence at the town, and reaches the published 67\,km$^2$ about 5.5\,km downstream. The paper gives no outlet for that figure, so the DEM and the publication agree if the valley is taken to end above Rambara. The Melton ratio of 0.72 gives a debris flow, as observed.
+
+\textbf{Stage 3.} Both runs completed in about 30 minutes each, with a volume error under 0.01\% and no water against the model edge. The flood follows the Mandakini through the town at 1.6--2.6\,m and 5--6\,m/s, extreme on the hazard scale, and reaches the temple point (Figure~\ref{fig:kedarnath}). Of the cells HEC-RAS rates significant or extreme, 89\% are high or very high on the AHP map. The AHP's AUC against the simulated flood is 0.73 (R04) and 0.75 (R05, bulked for debris), lower than the 0.83--0.86 of the Leh runs. Most of the gap is in what the two maps cover. The AHP flags all seven feeders of the complex, including the Saraswati branch that one simulated feeder does not reach. The simulated flood also stays in a channel one or two 29\,m cells wide, so rank correlation with depth is 0.29 against 0.58 at Leh.
+
+\textbf{What the test found.} One step was Leh-specific: the outflow line was lengthened by 900\,m along a single edge of the model outline. At Kedarnath that edge is 333\,m long, and the step failed. It now follows the outline round corners and stops short of the inflow line, and it gives the same result at Leh. No AHP weight, profile setting or HEC-RAS parameter needed changing. The inflow is rain only: the lake outburst is not modelled, so 109--199\,m$^3$/s is a lower bound on 17 June 2013.
+
+% =====================================================================================
 \section{Impact Assessment Design}\label{sec:impact}
 Accuracy is necessary but not sufficient: the tool only matters if officials read it correctly and change decisions. We designed a three-phase assessment for the next stage, structured by the four early-warning elements \cite{wmo2018}. It has not yet been run.
 
@@ -277,11 +314,12 @@ Accuracy is necessary but not sufficient: the tool only matters if officials rea
 
 % =====================================================================================
 \section{Discussion and Limitations}
-\textbf{What the cheap screen is good for.} After the routing fix, the AHP map ranks the 2010 footprint better than the hydraulic model (AUC 0.85 against 0.77) and agrees with it (AUC 0.81). It runs in seconds per DEM, so it can choose where the 2D solver should run next. The hydraulic model adds what the AHP cannot: depths, speeds, hazard classes and a check against a measured section.
+\textbf{What the cheap screen is good for.} After the routing fix, the AHP map ranks the 2010 footprint better than the hydraulic model (AUC 0.85 against 0.77) and agrees with it (AUC 0.81). At Kedarnath, with no Leh setting, the agreement is lower (0.73--0.75), but 89\% of the cells the simulation rates significant or extreme are already high on the AHP map. It runs in seconds per DEM, so it can choose where the 2D solver should run next. The hydraulic model adds what the AHP cannot: depths, speeds, hazard classes and a check against a measured section.
 
 \textbf{Limitations.}
 \begin{itemize}
-  \item The apex detector fails in narrow trunk valleys (Dharali), and fan outlines there are smaller than deposits.
+  \item The apex detector fails in narrow trunk valleys (Dharali, Kedarnath), and fan outlines there are smaller than deposits.
+  \item Lake outbursts are not modelled; at Kedarnath the inflow is rain only, and no observed footprint exists to score it.
   \item A 27--30\,m DEM is as wide as the channel; finer terrain, such as ALOS 12.5\,m, was not tested.
   \item HEC-RAS runs clear water with one roughness. Bingham debris-flow runs need rheology nobody measured for these sites.
   \item Road embankments and culverts, which diverted the 2010 flow \cite{bhatt2011}, are not in the terrain.
@@ -291,13 +329,13 @@ Accuracy is necessary but not sufficient: the tool only matters if officials rea
 
 % =====================================================================================
 \section{Conclusion}
-A freely available DEM is enough to find the fans, rank where flash floods will hurt, build and run a 2D hydraulic model, and list who is exposed, with skill that can be measured against an observed flood. On Leh 2010 the pipeline matches the observed footprint (AUC 0.85 for the AHP screen, 0.77 for HEC-RAS) and the measured depth at Sabu (within 3\%). It is robust to the expert weights and to roughness. On Dharali 2025 it transfers once a single apex is given, and gets the flow type right. All code, data and results are open at \url{https://github.com/SaharshLaud/fanrisk}, so a district team or a researcher can repeat every number here and run the same chain on their own valley.
+A freely available DEM is enough to find the fans, rank where flash floods will hurt, build and run a 2D hydraulic model, and list who is exposed, with skill that can be measured against an observed flood. On Leh 2010 the pipeline matches the observed footprint (AUC 0.85 for the AHP screen, 0.77 for HEC-RAS) and the measured depth at Sabu (within 3\%). It is robust to the expert weights and to roughness. On Dharali 2025 it transfers once a single apex is given, and gets the flow type right. On Kedarnath 2013 the whole chain, HEC-RAS included, runs with default settings, and the AHP and the hydraulic model agree on where the flood is most dangerous; the only Leh-specific step we found has been fixed. All code, data and results are open at \url{https://github.com/SaharshLaud/fanrisk}, so a district team or a researcher can repeat every number here and run the same chain on their own valley.
 
 \begin{acks}
 We thank Prof. Aaditeshwar Seth for guidance throughout the ICTD course. Building outlines \copyright\ Microsoft (ODbL); roads and facilities \copyright\ OpenStreetMap contributors (ODbL); DEM Copernicus GLO-30 \copyright\ DLR and Airbus, provided under COPERNICUS by the EU and ESA; background imagery \copyright\ Esri, Maxar, Earthstar Geographics.
 \end{acks}
 
-\begin{thebibliography}{30}
+\begin{thebibliography}{40}
 \bibitem{thayyen2013} R.~J. Thayyen, A.~P. Dimri, P.~Kumar, and G.~Agnihotri. 2013. Study of cloudburst and flash floods around Leh, India, during August 4--6, 2010. \emph{Natural Hazards} 65(3), 2175--2204. doi:10.1007/s11069-012-0464-2.
 \bibitem{bhatt2011} C.~M. Bhatt, G.~S. Rao, P.~Manjusree, and V.~Bhanumurthy. 2011. Potential of high resolution satellite data for disaster management: a case study of Leh, Jammu \& Kashmir (India) flash floods, 2010. \emph{Geomatics, Natural Hazards and Risk} 2(4), 365--375. doi:10.1080/19475705.2011.580014.
 \bibitem{negi2020} H.~S. Negi et~al. 2020. Susceptibility assessment of rainfall induced debris flow zones in Ladakh--Nubra region, Indian Himalaya. \emph{Journal of Earth System Science} 129, 30.
@@ -328,6 +366,7 @@ We thank Prof. Aaditeshwar Seth for guidance throughout the ICTD course. Buildin
 \bibitem{brooke1996} J.~Brooke. 1996. SUS: a ``quick and dirty'' usability scale. In \emph{Usability Evaluation in Industry}. Taylor \& Francis, 189--194.
 \bibitem{bangor2009} A.~Bangor, P.~Kortum, and J.~Miller. 2009. Determining what individual SUS scores mean: adding an adjective rating scale. \emph{Journal of Usability Studies} 4(3), 114--123.
 \bibitem{hseep2020} FEMA. 2020. \emph{Homeland Security Exercise and Evaluation Program (HSEEP)}. U.S. Department of Homeland Security.
+\bibitem{singh2015} D.~S. Singh et al. 2015. Brief communication: Rapid assessment of the 2013 Kedarnath disaster. \emph{Natural Hazards and Earth System Sciences} 15, 1597--1601. doi:10.5194/nhess-15-1597-2015.
 \bibitem{lindell2012} M.~K. Lindell and R.~W. Perry. 2012. The Protective Action Decision Model: theoretical modifications and additional evidence. \emph{Risk Analysis} 32(4), 616--632. doi:10.1111/j.1539-6924.2011.01647.x.
 \end{thebibliography}
 

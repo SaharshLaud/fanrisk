@@ -1,0 +1,65 @@
+{
+  "model": {
+    "cell_m": 28.642914407157257,
+    "wet_area_km2": 0.15751997678126145,
+    "max_depth_m": 3.027397632598877,
+    "max_speed_ms": 8.847271919250488,
+    "hazard_class_area_km2": {
+      "dry": 5.315478799821838,
+      "low": 0.0,
+      "moderate": 0.004102082728678683,
+      "significant": 0.031175828737957993,
+      "extreme": 0.12224206531462477
+    },
+    "wet_cells_at_boundary_lines": 2,
+    "boundary_lines_known": true,
+    "wet_cells_at_model_edge": 0,
+    "wet_share_at_model_edge_pct": 0.0
+  },
+  "points": {
+    "n_points": 1,
+    "n_inside_model_area": 1,
+    "hit_rate": 1.0,
+    "median_depth_at_points_m": 0.3172606825828552
+  },
+  "widths": [],
+  "probes": [],
+  "ahp": {
+    "cells_compared": 1452,
+    "spearman_risk_vs_hazard_rating": 0.2908492594362938,
+    "spearman_risk_vs_depth": 0.28685528647469183,
+    "roc_auc_risk_vs_wet": 0.7348609721363001,
+    "spearman_risk_vs_depth_wet_cells_only": 0.021350578671810415,
+    "roc_auc_risk_vs_deep_ge_1m": 0.7227709467177317,
+    "roc_auc_risk_vs_wet_within_300m_of_centreline": 0.7421612763100739,
+    "wet_cells_share_by_ahp_class_pct": [
+      0.0,
+      1.5706806282722514,
+      9.424083769633508,
+      50.78534031413613,
+      38.21989528795812
+    ],
+    "wet_share_by_ahp_class_pct": [
+      NaN,
+      0.8928571428571428,
+      4.945054945054945,
+      26.72176308539945,
+      18.76606683804627
+    ],
+    "area_share_by_ahp_class_pct": [
+      0.0,
+      23.140495867768596,
+      25.068870523415974,
+      25.0,
+      26.79063360881543
+    ]
+  },
+  "files_used": {
+    "depth": "Depth (Max).tif",
+    "depth_kind": "max",
+    "velocity": "Velocity (Max).tif",
+    "velocity_kind": "max",
+    "arrival": null,
+    "maximum_maps": true
+  }
+}

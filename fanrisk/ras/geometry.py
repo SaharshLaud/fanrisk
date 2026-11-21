@@ -219,8 +219,8 @@ def fit_geometry(g_path, handoff_dir, spacing, log=print):
 
 
 def extend_outflow(g_path, extra_m, name="outflow", log=print):
-    """Lengthen a boundary line by `extra_m` along the perimeter, beyond its end: one perimeter vertex is inserted and the line follows
-    the perimeter up to it. The perimeter shape and the computation points do not change. Returns (old length, new length)."""
+    """Lengthen a boundary line by `extra_m` along the perimeter, beyond its end, following the perimeter round its corners (at most one
+    vertex is inserted) and stopping short of any other boundary line. The perimeter shape and the computation points do not change. Returns (old length, new length)."""
     L, EOL = _read(g_path)
     i0, n0, Rarr = _perimeter(L)
     R = [tuple(r) for r in Rarr]
@@ -232,17 +232,38 @@ def extend_outflow(g_path, extra_m, name="outflow", log=print):
     near = lambda p: min(range(n0), key=lambda j: math.hypot(R[j][0] - p[0], R[j][1] - p[1]))
     idx = [near(p) for p in P]
     step = 1 if (idx[1] - idx[0]) % n0 == 1 else -1
-    e = idx[-1]
-    j = (e + step) % n0
-    (xa, ya), (xb, yb) = R[e], R[j]
-    seg = math.hypot(xb - xa, yb - ya)
-    if extra_m >= seg - 1:
-        raise RuntimeError("extension %.0f m >= the next perimeter edge (%.0f m): use a shorter extension, or run it again for the next edge" % (extra_m, seg))
-    t = extra_m / seg
-    nv = (xa + t * (xb - xa), ya + t * (yb - ya))
-    ins = max(e, j) if abs(e - j) == 1 else 0             # the wrap-around edge (last vertex <-> first): append at the end
-    R2 = R[:ins] + [nv] + R[ins:] if ins else R + [nv]
-    newP = [R[q] for q in idx] + [nv]
+    taken = set()                                          # perimeter vertices used by the OTHER boundary lines: never run into them
+    for k2, (_, _, _, P2) in blocks.items():
+        if k2 != key:
+            taken.update(near(p) for p in P2)
+    e, left, extra_idx = idx[-1], float(extra_m), []
+    while True:                                            # walk along the perimeter, corner by corner, until the length is used up
+        j = (e + step) % n0
+        (xa, ya), (xb, yb) = R[e], R[j]
+        seg = math.hypot(xb - xa, yb - ya)
+        if j in taken or j in idx:
+            seg_cap = max(0.0, seg - 1.0)                  # stop just short of the next line
+            if left > seg_cap:
+                log("%s line: the next boundary line is %.0f m further on - extension cut from %.0f m to %.0f m" % (
+                    key, seg, extra_m, extra_m - left + seg_cap))
+                left = seg_cap
+            break
+        if left < seg - 1:
+            break
+        extra_idx.append(j)
+        left -= seg
+        e = j
+    if left < 1.0 and not extra_idx:
+        raise RuntimeError("no room to extend the %s line along the perimeter" % key)
+    if left >= 1.0:
+        t = left / seg
+        nv = (xa + t * (xb - xa), ya + t * (yb - ya))
+        ins = max(e, j) if abs(e - j) == 1 else 0             # the wrap-around edge (last vertex <-> first): append at the end
+        R2 = R[:ins] + [nv] + R[ins:] if ins else R + [nv]
+        newP = [R[q] for q in idx] + [R[q] for q in extra_idx] + [nv]
+    else:                                                  # the length ends on a corner: no new vertex
+        R2 = list(R)
+        newP = [R[q] for q in idx] + [R[q] for q in extra_idx]
     cum = [0.0]
     for q in range(1, len(newP)):
         cum.append(cum[-1] + math.hypot(newP[q][0] - newP[q - 1][0], newP[q][1] - newP[q - 1][1]))
@@ -259,8 +280,10 @@ def extend_outflow(g_path, extra_m, name="outflow", log=print):
     je = ia + 1 + int(math.ceil(na / 2.0))
     out = out[:js] + blk + out[je:]
     _write(g_path, out, EOL)
-    log("%s line: %.0f m -> %.0f m (%d -> %d vertices); perimeter %d -> %d vertices" % (key, cum[-2], cum[-1], na, len(newP), n0, len(R2)))
-    return cum[-2], cum[-1]
+    old_len = cum[len(idx) - 1]
+    log("%s line: %.0f m -> %.0f m (%d -> %d vertices, %d perimeter corner(s) passed); perimeter %d -> %d vertices" % (
+        key, old_len, cum[-1], na, len(newP), len(extra_idx), n0, len(R2)))
+    return old_len, cum[-1]
 
 
 def _set_line(path, prefix, new_line):

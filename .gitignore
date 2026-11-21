@@ -19,10 +19,12 @@ maps_?_*.txt
 validate_?_*.txt
 exposure_?_*.txt
 dharali_?_*.txt
+kedarnath_*.txt
 chain_?_*.txt
 
 # Downloaded on demand (tools/get_dem.py, tools/get_ms_buildings.py)
 data/dharali_2025/
+data/kedarnath_2013/
 data/ms_buildings_*.csv.gz
 mysite/
 

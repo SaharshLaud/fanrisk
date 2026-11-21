@@ -1,0 +1,13 @@
+EVENT CHECK - Kedarnath - fully automatic run (no manual apex)
+  place: 30.7352 N, 79.0669 E  (map x 314930, y 3401852)
+  fans found on the DEM: 14
+  nearest fan: fan 10 in complex C3, the place is ON it (0 m away)
+    fan area 2.46 km2, mean slope 15.8 deg, apex 4107 m
+  catchment draining onto it: 3.0 km2   (published 67.0 km2: -96%)
+  Melton ratio: 1.31
+  flow type from the Melton breaks 0.3 / 0.6: DEBRIS FLOW
+  (complex C3 has 7 feeders; the largest, F1, drains 15.5 km2 with Melton 0.73)
+  AHP risk at the place: 0.26 = LOW  (ahp_C3_risk_abs.tif)
+    within 250 m: highest 0.78, 31% of cells high or above
+  area of that fan marked high or above: 87.8 ha
+  complex C3 ranks 1 of 6 complexes by catchment source score (C = 0.60)

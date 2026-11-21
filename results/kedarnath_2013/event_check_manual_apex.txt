@@ -1,0 +1,13 @@
+EVENT CHECK - Kedarnath - Mandakini (test of the 2013 flood)
+  place: 30.7352 N, 79.0669 E  (map x 314930, y 3401852)
+  fans found on the DEM: 15
+  nearest fan: fan 1 in complex C2, the place is ON it (0 m away)
+    fan area 0.85 km2, mean slope 15.4 deg, apex 3814 m
+  catchment draining onto it: 18.6 km2   (published 67.0 km2: -72%)
+  Melton ratio: 0.72
+  flow type from the Melton breaks 0.3 / 0.6: DEBRIS FLOW
+  (complex C2 has 7 feeders; the largest, F1, drains 18.6 km2 with Melton 0.72)
+  AHP risk at the place: 0.26 = LOW  (ahp_C2_risk_abs.tif)
+    within 250 m: highest 0.79, 31% of cells high or above
+  area of that fan marked high or above: 32.5 ha
+  complex C2 ranks 1 of 6 complexes by catchment source score (C = 0.60)

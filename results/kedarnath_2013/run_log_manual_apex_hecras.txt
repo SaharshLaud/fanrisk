@@ -1,0 +1,182 @@
+[   0.2s] fanrisk 0.1.0 - site 'Kedarnath - Mandakini (test of the 2013 flood)' - file backend: rasterio
+[   0.2s] Region profile: humid_mountain - Soil and vegetation hold back part of the rain: runoff from the SCS curve number, wet antecedent conditions.
+[   0.2s] Settings that differ from the method defaults:
+[   0.2s]   APEX_MODE                  = both                   <- site.toml [advanced]
+[   0.2s]   CN_AMC                     = 3                      <- region profile 'humid_mountain'
+[   0.2s]   CURVE_NUMBER               = 80                     <- site.toml [runoff] curve_number
+[   0.2s]   MANUAL_APEXES              = [('K1', 'Mandakini', 79.0663, 30.7445)] <- site.toml [targets] manual_apexes
+[   0.2s]   RAINFALL_DESIGN_MM         = 210                    <- site.toml [storm] rainfall_mm
+[   0.2s]   RAS_FEEDER                 = F1                     <- site.toml [hecras] feeder
+[   0.2s]   RAS_N_CHANNEL              = 0.06                   <- region profile 'humid_mountain'
+[   0.2s]   RAS_N_FAN                  = 0.06                   <- region profile 'humid_mountain'
+[   0.2s]   RUNOFF_METHOD              = scs_cn                 <- region profile 'humid_mountain'
+[   0.2s]   STORM_DURATION_MIN         = 720                    <- site.toml [storm] duration_min
+[   0.3s] DEM is in degrees - warping to EPSG:32644 at 28.6 m ...
+[   0.3s] DEM: dem.tif  (EPSG:32644, 550 x 861 cells of 28.6 m)
+[   0.3s] Hydrological analysis: sink filling + flow directions (861 x 550 cells of 28.6 m) ...
+[   1.1s] Flow accumulation ...
+[   1.2s]   drainage network: 10297 channel cells (threshold 609 cells = 0.50 km2)
+[   1.2s] Fan surface (channels filled) and slope ...
+[   1.9s] Apex detection (valley mouths): 20 found
+[   1.9s]   known apex K1       (catchment 18.6 km2): nearest detected apex is 1486 m away
+[   1.9s] Delineating fans for 21 apexes ...
+[   6.0s] Done: 15 fans accepted, 6 candidates rejected
+[   6.3s] Coalescence: 15 fans -> 6 fan complexes
+[   6.3s]   design storm: 210 mm in 720 min everywhere
+[   6.3s]   runoff: SCS curve number 80 everywhere; antecedent moisture 3
+[   6.8s]   validation points    <- kedarnath_points.geojson: 1 feature(s)
+[   6.8s]   validation: 1 flooded cell(s) on the DEM grid (0.00 km2)
+[   6.9s] Criteria rasters: slope, fan slope, local relief (+-17 cells), ruggedness (TRI), upstream area, event rainfall
+[   6.9s] AHP weights (consistency ratio must be <= 0.10):
+[   6.9s]   catchment source (5 criteria, CR 0.0204): slope 0.372, local_relief 0.249, upstream_area 0.307, ruggedness 0.073
+[   6.9s]   fan hazard       (6 criteria, CR 0.0433): hand_inv 0.306, fan_slope 0.212, upstream_area 0.295, local_relief 0.100, event_rainfall 0.087
+[   6.9s]   (catchment AHP: hist_rainfall, bare_sparse not supplied -> removed from the matrix and the weights re-solved)
+[   7.2s] FAN COMPLEXES ranked by catchment-source susceptibility (C) and feeders
+[   7.2s]   id   area km2 C max  prior.  feeders  feeder catchments (km2) : C
+[   7.2s]   2        3.51  0.60    0.60        7  F1 18.6 : 0.60; F2 3.0 : 0.60; F3 2.9 : 0.57; F4 5.6 : 0.46; F5 4.5 : 0.43; F6 3.3 : 0.43; F7 1.5 : 0.41
+[   7.2s]   6        0.19  0.58    0.58        1  F1 1.6 : 0.58
+[   7.2s]   3        3.49  0.56    0.56        9  F1 7.6 : 0.56; F2 5.7 : 0.54; F3 4.2 : 0.41; F4 3.9 : 0.50; F5 3.1 : 0.45; F6 6.3 : 0.27; F7 4.2 : 0.55; F8 1.6 : 0.37; F9 1.4 : 0.09
+[   7.2s]   1        3.82  0.50    0.50        4  F1 4.1 : 0.44; F2 3.4 : 0.50; F3 5.4 : 0.46; F4 1.4 : 0.26
+[   7.2s]   4        1.64  0.38    0.38        1  F1 2.6 : 0.38
+[   7.2s]   5        1.42  0.26    0.26        2  F1 1.5 : 0.24; F2 2.0 : 0.26
+[   7.2s] Target fan complex(es): C1, C2, C3, C4, C5
+[   8.5s]   C1: run-out corridor adds 0.64 km2 beyond the 3.82 km2 fan (flood path followed up to 3000 m past the toe)
+[   8.8s] Complex C1 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[   8.8s]   absolute scale: 0.00  1.27  1.73  0.81  0.65
+[   8.8s]   relative scale: 0.01  0.09  1.19  2.02  1.15
+[   8.8s]   feeders (catchment km2, C source, trigger T, peak m3/s):
+[   8.8s]     F1       4.1 km2  C 0.44  T 0.30  Qp 25 m3/s, 180 mm runoff, Tp 370 min
+[   8.8s]     F2       3.4 km2  C 0.50  T 0.27  Qp 20 m3/s, 180 mm runoff, Tp 371 min
+[   8.8s]     F3       5.4 km2  C 0.46  T 0.36  Qp 33 m3/s, 180 mm runoff, Tp 373 min
+[   8.8s]     F4       1.4 km2  C 0.26  T 0.10  Qp 9 m3/s, 180 mm runoff, Tp 373 min
+[   8.8s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[   8.8s]     0.05 km2: r = 0.92, top-20% overlap 0.84, median HAND 5 m, 49% of the fan within 5 m
+[   8.8s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 10 m, 37% of the fan within 5 m
+[   8.8s]     0.50 km2: r = 0.98, top-20% overlap 0.83, median HAND 13 m, 32% of the fan within 5 m
+[   8.8s]     1.00 km2: r = 0.93, top-20% overlap 0.67, median HAND 22 m, 25% of the fan within 5 m
+[   8.8s]     2.00 km2: r = 0.80, top-20% overlap 0.58, median HAND 63 m, 17% of the fan within 5 m
+[   8.8s]   validation risk_abs               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[   8.8s]   validation risk_rel               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[   8.8s]   validation worst_cloudburst_abs   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[   8.8s]   validation worst_cloudburst_rel   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  10.2s]   C2: run-out corridor adds 0.48 km2 beyond the 3.51 km2 fan (flood path followed up to 3000 m past the toe)
+[  10.5s] Complex C2 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[  10.5s]   absolute scale: 0.00  1.12  1.47  0.86  0.53
+[  10.5s]   relative scale: 0.00  0.21  1.30  1.74  0.74
+[  10.5s]   feeders (catchment km2, C source, trigger T, peak m3/s):
+[  10.5s]     F1      18.6 km2  C 0.60  T 0.58  Qp 109 m3/s, 180 mm runoff, Tp 383 min
+[  10.5s]     F2       3.0 km2  C 0.60  T 0.24  Qp 18 m3/s, 180 mm runoff, Tp 369 min
+[  10.5s]     F3       2.9 km2  C 0.57  T 0.24  Qp 17 m3/s, 180 mm runoff, Tp 367 min
+[  10.5s]     F4       5.6 km2  C 0.46  T 0.36  Qp 33 m3/s, 180 mm runoff, Tp 377 min
+[  10.5s]     F5       4.5 km2  C 0.43  T 0.32  Qp 27 m3/s, 180 mm runoff, Tp 374 min
+[  10.5s]     F6       3.3 km2  C 0.43  T 0.26  Qp 20 m3/s, 180 mm runoff, Tp 368 min
+[  10.5s]     F7       1.5 km2  C 0.41  T 0.11  Qp 9 m3/s, 180 mm runoff, Tp 366 min
+[  10.5s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[  10.5s]     0.05 km2: r = 0.96, top-20% overlap 0.77, median HAND 5 m, 51% of the fan within 5 m
+[  10.5s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 11 m, 37% of the fan within 5 m
+[  10.5s]     0.50 km2: r = 0.95, top-20% overlap 0.86, median HAND 15 m, 31% of the fan within 5 m
+[  10.5s]     1.00 km2: r = 0.87, top-20% overlap 0.79, median HAND 20 m, 25% of the fan within 5 m
+[  10.5s]     2.00 km2: r = 0.86, top-20% overlap 0.75, median HAND 30 m, 20% of the fan within 5 m
+[  10.5s]   validation risk_abs               ROC-AUC 0.009 | success-rate AUC 0.005 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 99% of the map
+[  10.5s]   validation risk_rel               ROC-AUC 0.257 | success-rate AUC 0.255 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 74% of the map
+[  10.5s]   validation worst_cloudburst_abs   ROC-AUC 0.006 | success-rate AUC 0.005 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 99% of the map
+[  10.5s]   validation worst_cloudburst_rel   ROC-AUC 0.134 | success-rate AUC 0.135 | flooded cells inside this fan: 1 (100% of all) | they sit in the top 87% of the map
+[  11.3s]   C3: run-out corridor adds 1.50 km2 beyond the 3.49 km2 fan (flood path followed up to 3000 m past the toe)
+[  11.7s] Complex C3 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[  11.7s]   absolute scale: 0.08  2.84  1.57  0.44  0.05
+[  11.7s]   relative scale: 0.00  0.63  2.27  1.82  0.27
+[  11.7s]   feeders (catchment km2, C source, trigger T, peak m3/s):
+[  11.7s]     F1       7.6 km2  C 0.56  T 0.42  Qp 45 m3/s, 180 mm runoff, Tp 377 min
+[  11.7s]     F2       5.7 km2  C 0.54  T 0.36  Qp 34 m3/s, 180 mm runoff, Tp 376 min
+[  11.7s]     F3       4.2 km2  C 0.41  T 0.30  Qp 25 m3/s, 180 mm runoff, Tp 377 min
+[  11.7s]     F4       3.9 km2  C 0.50  T 0.29  Qp 24 m3/s, 180 mm runoff, Tp 372 min
+[  11.7s]     F5       3.1 km2  C 0.45  T 0.25  Qp 19 m3/s, 180 mm runoff, Tp 368 min
+[  11.7s]     F6       6.3 km2  C 0.27  T 0.37  Qp 36 m3/s, 180 mm runoff, Tp 397 min
+[  11.7s]     F7       4.2 km2  C 0.55  T 0.31  Qp 26 m3/s, 180 mm runoff, Tp 371 min
+[  11.7s]     F8       1.6 km2  C 0.37  T 0.13  Qp 10 m3/s, 180 mm runoff, Tp 368 min
+[  11.7s]     F9       1.4 km2  C 0.09  T 0.09  Qp 8 m3/s, 180 mm runoff, Tp 387 min
+[  11.7s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[  11.7s]     0.05 km2: r = 0.98, top-20% overlap 0.94, median HAND 5 m, 49% of the fan within 5 m
+[  11.7s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 6 m, 46% of the fan within 5 m
+[  11.7s]     0.50 km2: r = 0.99, top-20% overlap 0.95, median HAND 6 m, 44% of the fan within 5 m
+[  11.7s]     1.00 km2: r = 0.89, top-20% overlap 0.90, median HAND 7 m, 38% of the fan within 5 m
+[  11.7s]     2.00 km2: r = 0.80, top-20% overlap 0.86, median HAND 8 m, 34% of the fan within 5 m
+[  11.7s]   validation risk_abs               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  11.7s]   validation risk_rel               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  11.7s]   validation worst_cloudburst_abs   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  11.7s]   validation worst_cloudburst_rel   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.2s]   C4: run-out corridor adds 1.24 km2 beyond the 1.64 km2 fan (flood path followed up to 3000 m past the toe)
+[  12.3s] Complex C4 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[  12.3s]   absolute scale: 0.27  1.44  1.04  0.13  0.00
+[  12.3s]   relative scale: 0.00  0.58  1.43  0.74  0.12
+[  12.3s]   feeders (catchment km2, C source, trigger T, peak m3/s):
+[  12.3s]     F1       2.6 km2  C 0.38  T 0.21  Qp 16 m3/s, 180 mm runoff, Tp 374 min
+[  12.3s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[  12.3s]     0.05 km2: r = 0.89, top-20% overlap 0.87, median HAND 3 m, 68% of the fan within 5 m
+[  12.3s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 4 m, 55% of the fan within 5 m
+[  12.3s]     0.50 km2: r = 0.89, top-20% overlap 0.88, median HAND 6 m, 43% of the fan within 5 m
+[  12.3s]     1.00 km2: r = 0.84, top-20% overlap 0.87, median HAND 16 m, 26% of the fan within 5 m
+[  12.3s]     2.00 km2: r = 0.83, top-20% overlap 0.86, median HAND 27 m, 23% of the fan within 5 m
+[  12.3s]   validation risk_abs               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.3s]   validation risk_rel               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.3s]   validation worst_cloudburst_abs   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.3s]   validation worst_cloudburst_rel   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.8s]   C5: run-out corridor adds 0.74 km2 beyond the 1.42 km2 fan (flood path followed up to 3000 m past the toe)
+[  12.9s] Complex C5 risk R = H x E (no exposure layer, E = 1); area per class [very low .. very high], km2:
+[  12.9s]   absolute scale: 0.00  0.85  0.87  0.38  0.07
+[  12.9s]   relative scale: 0.00  0.06  0.41  1.33  0.36
+[  12.9s]   feeders (catchment km2, C source, trigger T, peak m3/s):
+[  12.9s]     F1       1.5 km2  C 0.24  T 0.12  Qp 9 m3/s, 180 mm runoff, Tp 369 min
+[  12.9s]     F2       2.0 km2  C 0.26  T 0.17  Qp 12 m3/s, 180 mm runoff, Tp 372 min
+[  12.9s]   HAND channel-threshold sensitivity (relative hazard vs the 0.25 km2 default):
+[  12.9s]     0.05 km2: r = 0.95, top-20% overlap 0.82, median HAND 1 m, 64% of the fan within 5 m
+[  12.9s]     0.25 km2: r = 1.00, top-20% overlap 1.00, median HAND 6 m, 45% of the fan within 5 m
+[  12.9s]     0.50 km2: r = 0.98, top-20% overlap 0.86, median HAND 9 m, 36% of the fan within 5 m
+[  12.9s]     1.00 km2: r = 0.96, top-20% overlap 0.77, median HAND 12 m, 29% of the fan within 5 m
+[  12.9s]     2.00 km2: r = 0.72, top-20% overlap 0.45, median HAND 28 m, 13% of the fan within 5 m
+[  12.9s]   validation risk_abs               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.9s]   validation risk_rel               ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.9s]   validation worst_cloudburst_abs   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.9s]   validation worst_cloudburst_rel   ROC-AUC n/a | success-rate AUC n/a | flooded cells inside this fan: 0 (0% of all) | they sit in the top n/a% of the map
+[  12.9s] Writing fan outputs to C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\kedarnath_2013\fans
+[  14.0s] Risk files -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\kedarnath_2013\risk: risk_abs / risk_rel / hazard / flow_km2 / worst-case GeoTIFFs (+ .qml styles), master_table.csv, ahp_summary.json, ahp_validation.csv
+[  14.5s] HEC-RAS handoff -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\kedarnath_2013\hecras\handoff_C2_F1
+[  14.5s]   C2 F1: reach 4.23 km (DEM flow path), 2D flow area 5.48 km2 (about 54804 cells at 10 m), bed 3809 -> 3138 m
+[  14.5s]   inflow: pipeline (SCS) for the rainfall given; peak 109 m3/s at 383 min, volume 3.35 million m3. Flow type debris flow (Melton 0.72). 9 scenario runs listed.
+[  14.5s]   NOTE: the DEM cell (28.6 m) is coarser than the suggested mesh (10 m): finer mesh cells add no terrain detail - use a finer DEM if you have one
+[  15.4s] Vector layers -> C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\kedarnath_2013\fans\fanrisk.gpkg
+[  15.4s] RESULTS: 15 fans in 6 fan complexes
+[  15.4s]   FAN COMPLEXES (merged flood plains / bajadas) and ALL catchments feeding them
+[  15.4s]   id   fans     area km2   catch km2  Melton  flags
+[  15.4s]   1    3            3.82         7.5    0.59  narrow
+[  15.4s]   2    4            3.51        24.4    0.63  narrow
+[  15.4s]   3    5            3.49        24.4    0.46  DEM-edge
+[  15.4s]   4    1            1.64         2.6    0.69  narrow
+[  15.4s]   5    1            1.42         1.5    0.66  
+[  15.4s]   6    1            0.19         1.6    1.21  
+[  15.4s]   FEEDERS (C = source susceptibility 0-1, T = storm trigger 0-1)
+[  15.4s]   feeder     catch km2      C   rain mm   peak m3/s    tp min      T
+[  15.4s]   C1-F1           4.13   0.44       210          25       370   0.30
+[  15.4s]   C1-F2           3.37   0.50       210          20       371   0.27
+[  15.4s]   C1-F3           5.44   0.46       210          33       373   0.36
+[  15.4s]   C1-F4           1.44   0.26       210           9       373   0.10
+[  15.4s]   C2-F1          18.60   0.60       210         109       383   0.58
+[  15.4s]   C2-F2           2.98   0.60       210          18       369   0.24
+[  15.4s]   C2-F3           2.86   0.57       210          17       367   0.24
+[  15.4s]   C2-F4           5.58   0.46       210          33       377   0.36
+[  15.4s]   C2-F5           4.52   0.43       210          27       374   0.32
+[  15.4s]   C2-F6           3.27   0.43       210          20       368   0.26
+[  15.4s]   C2-F7           1.49   0.41       210           9       366   0.11
+[  15.4s]   C3-F1           7.56   0.56       210          45       377   0.42
+[  15.4s]   C3-F2           5.71   0.54       210          34       376   0.36
+[  15.4s]   C3-F3           4.16   0.41       210          25       377   0.30
+[  15.4s]   C3-F4           3.90   0.50       210          24       372   0.29
+[  15.4s]   C3-F5           3.05   0.45       210          19       368   0.25
+[  15.4s]   C3-F6           6.32   0.27       210          36       397   0.37
+[  15.4s]   C3-F7           4.21   0.55       210          26       371   0.31
+[  15.4s]   C3-F8           1.60   0.37       210          10       368   0.13
+[  15.4s]   C3-F9           1.41   0.09       210           8       387   0.09
+[  15.4s]   C4-F1           2.60   0.38       210          16       374   0.21
+[  15.4s]   C5-F1           1.53   0.24       210           9       369   0.12
+[  15.4s]   C5-F2           2.02   0.26       210          12       372   0.17
+[  15.4s] Done. Open C:\Users\sahar\OneDrive\Desktop\fanrisk\fanrisk\runs\kedarnath_2013 in QGIS: the risk GeoTIFFs load with their colours.

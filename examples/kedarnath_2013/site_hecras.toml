@@ -1,0 +1,40 @@
+# Kedarnath 2013, step 2: the same run as site.toml PLUS the automatic HEC-RAS 2D model - the test of Leh bias that matters most.
+# Step 1 found the town ON fan K1 (complex C2), fed by the Mandakini (feeder F1, 18.6 km2, Melton 0.72 = debris flow).
+# Everything below is the tool's DEFAULT, nothing copied from Leh: the inflow is the tool's own SCS hydrograph of the 2013 rain
+# (210 mm in 12 h, curve number 80 -> 109 m3/s), no channel burn (Leh uses 2 m), default reach 4.5 km and half-width 700 m,
+# the bundled template re-fitted to a new UTM zone (44N; Leh is 43N), Manning n 0.06 from the humid_mountain profile.
+# Runs: R04 = clear water x1.0 (109 m3/s); R05 = the same flood bulked for debris, Cv 0.45 -> x1.82 (199 m3/s).
+# The Chorabari lake outburst is NOT in the inflow, so both runs are a lower bound on what came down on 17 June 2013.
+[site]
+name = "Kedarnath - Mandakini (test of the 2013 flood)"
+dem = "../../data/kedarnath_2013/dem.tif"
+output_dir = "../../runs/kedarnath_2013"
+region_profile = "humid_mountain"
+
+[stages]
+risk = true
+hecras_handoff = true
+
+[storm]
+rainfall_mm = 210
+duration_min = 720
+
+[runoff]
+curve_number = 80
+
+[validation]
+flood_points = "../../data/validation/kedarnath_2013/kedarnath_points.geojson"
+
+[targets]
+mode = "all"
+manual_apexes = [["K1", "Mandakini", 79.0663, 30.7445]]
+
+[hecras]
+complex = 2
+feeder = "F1"
+inflow = "pipeline"
+base_plan = "02"
+project = "../../runs/kedarnath_2013/hecras/model/leh2d.prj"   # made by 'fanrisk hecras fit' (the file keeps the template's name)
+
+[advanced]
+APEX_MODE = "both"
