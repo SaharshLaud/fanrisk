@@ -47,7 +47,7 @@
 \begin{abstract}
 Settlements in Ladakh and across the Himalaya are built on alluvial fans, at the mouths of steep catchments where a short cloudburst turns into a flash flood or debris flow. The 2010 Leh cloudburst killed more than 250 people. Most of the deaths were on two fans, while the nearest rain gauge logged 12.8\,mm that day. District authorities have no fan-scale hazard maps and no hydraulic modelling capacity, and cloudbursts this local cannot yet be forecast.
 
-We present \texttt{fanrisk}, an open Python pipeline that maps, for a given storm scenario, which fans, which parts of each fan and which buildings are in danger. It starts from a freely available 30\,m DEM, identifies fans and their catchments, ranks them with a two-level Analytic Hierarchy Process (AHP), builds and runs a HEC-RAS 2D model of the main flood path without the graphical interface, and overlays buildings, roads and critical facilities.
+We present \texttt{fanrisk}, an open Python pipeline that maps, for a given storm scenario, which fans, which parts of each fan and which buildings are in danger. It starts from a freely available 30\,m DEM and identifies fans and their catchments automatically, with an apex detector based on terrain openness and a radial cone delineation; it then ranks them with a two-level Analytic Hierarchy Process (AHP), builds and runs a HEC-RAS 2D model of the main flood path without the graphical interface, and overlays buildings, roads and critical facilities.
 
 Against the 2010 flood footprint at Choglamsar, the AHP risk map reaches an AUC of 0.85 (POD 0.59, FAR 0.16). The HEC-RAS model reaches an AUC of 0.77 and reproduces the observed depth at the gauged Sabu section within 3\%. The AHP result is stable across 423 random perturbations of the expert judgements (AUC 0.82--0.85). The hydraulic result is stable across Manning's $n$ from 0.04 to 0.08 (AUC 0.76--0.77). In the hindcast, 541 present-day buildings are flooded 0.3\,m or deeper, 200 of them in the extreme hazard class.
 
@@ -66,7 +66,8 @@ The landform sequence is always the same: a steep catchment generates runoff and
 
 We built \texttt{fanrisk} to close that gap for the people who make siting and evacuation decisions: the District Disaster Management Authority (DDMA), panchayats and residents. It asks, for a given storm: which fans, which parts of each fan, and which buildings are in danger, and how deep and fast will the water be? Our contributions are:
 \begin{enumerate}
-  \item An \textbf{automated chain from a DEM to validated maps}: fan and catchment identification, a two-level AHP that separates catchment source susceptibility from fan hazard and exposure, and a HEC-RAS 2D model fitted, run in batch and read back without the GUI (Section~\ref{sec:method}).
+  \item \textbf{Automated alluvial-fan identification from a DEM alone}: an apex detector that finds where a channel leaves its confined valley (terrain openness), radial cone delineation adapted from Norini et al.\ \cite{norini2016}, acceptance tests, coalescence into fan complexes and full catchment delineation, with no hand digitising (Section~\ref{sec:stage1}). On Leh it finds 13 fans in seconds and matches the hand-drawn Sabu fan (IoU 0.86) and its catchment (IoU 0.96).
+  \item An \textbf{automated chain from a DEM to validated maps}: the identified fans feed a two-level AHP that separates catchment source susceptibility from fan hazard and exposure, and a HEC-RAS 2D model fitted, run in batch and read back without the GUI (Section~\ref{sec:method}).
   \item \textbf{Validation against an observed flood}: a footprint and 648 damaged houses traced from satellite damage mapping of the 2010 event, scored with AUC, POD, FAR and CSI. This is supported by sensitivity tests on the AHP judgements, terrain conditioning and roughness, and a cross-check against published values (Section~\ref{sec:results}).
   \item \textbf{Transfer tests on two more events} in a different climate and valley type, with no tuning: Dharali 2025 (Section~\ref{sec:dharali}) and Kedarnath 2013, where the whole chain including HEC-RAS is run to test for bias toward Leh (Section~\ref{sec:kedarnath}). They report where the pipeline fails as well as where it works.
   \item An \textbf{exposure layer and a delivery format} for non-specialists, and an \textbf{impact-assessment design} with indicators and survey instruments (Section~\ref{sec:impact}).
@@ -117,10 +118,55 @@ Figure~\ref{fig:pipeline} shows the stages. Every number comes from four layers,
 \end{enumerate}
 The run log lists every value that differs from the defaults and where it came from. Leh 2010 is stored as a validation case, never as a default.
 
-\subsection{Stage 1: fans and catchments}
-The DEM is sink-filled and flow is accumulated, and channels are cells draining more than 0.5\,km$^2$. An apex is the first channel cell where the terrain \emph{openness} reaches 90\% of its value 2\,km downstream. Openness is the number of 16 compass directions in which the terrain does not rise above 8$^\circ$ within 1\,km. The detector also requires that openness rose by at least 5 directions and reaches at least 8. From each apex a radial cone is grown on a channel-filled surface. Touching fans merge into complexes, and the full catchment of every feeder is delineated. Twenty-nine morphometric values are recorded per feeder, including the Melton ratio, which sets the flow type (breaks 0.3 and 0.6 \cite{wilford2004}).
+\subsection{Stage 1: automated fan identification}\label{sec:stage1}
+Stage 1 is the core of the method: every later stage runs on the fans and catchments it finds. In Assignment~2 these were drawn by hand in QGIS, which is slow, subjective and impossible to repeat on a new valley. Stage 1 replaces the hand drawing with six steps that need only the DEM (Figure~\ref{fig:stage1}, parameters in Table~\ref{tab:stage1}).
 
-Against hand-traced polygons the Sabu fan reaches an IoU of 0.86 and its catchment 0.96. The Sabu catchment is 62.4\,km$^2$, against 64.95\,km$^2$ published (\,$-4\%$). The same settings run unchanged on Trail Canyon, Death Valley.
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/stage1_fan_identification.png}
+  \caption{Automated fan identification at Leh. (a) The 13 accepted fans (coloured by complex) with accepted apexes (circles) and rejected candidates (crosses); black lines are the radial profiles that delineate the Sabu fan, and the dashed line is its catchment. (b) Openness along the Sabu channel: inside the valley the stream is walled in (about 6 of 16 directions open); as the valley opens, openness rises to 13--16 and stays high over the fan. (c) The channel long profile over the same distance; shading marks the delineated fan.}
+  \label{fig:stage1}
+\end{figure*}
+
+\textbf{1. Hydrological conditioning.} No-data margins are masked, a DEM in degrees is reprojected to UTM, and pits are filled with the Priority-Flood algorithm \cite{barnes2014}, which also gives every cell a D8 flow direction (the steepest of its eight neighbours \cite{ocallaghan1984}). Flow accumulation turns this into upstream area. A cell is a channel when at least 0.5\,km$^2$ (and at least 400 cells) drains through it.
+
+\textbf{2. Apex detection by openness.} An alluvial-fan apex is where a feeder channel leaves its confined valley and the flow is free to spread. We measure confinement directly. For a channel cell, the \emph{openness} is the number of 16 compass directions in which the ground does not rise more steeply than 8$^\circ$ within 1\,km; terrain outside the DEM counts as blocked. This is a simplified, count-based form of topographic openness \cite{yokoyama2002}. Inside a gorge only the up- and down-valley directions are open; on a fan most of them are (Figure~\ref{fig:stage1}b). Openness is computed on a copy of the DEM in which gullies narrower than about 160\,m are filled (a grey-scale morphological closing), so that small incisions do not read as valley walls, and is smoothed over 130\,m along the channel. A channel cell becomes a candidate apex when it is the first cell, walking downstream, whose openness reaches 90\% of the highest value found within the next 2\,km, provided that openness rose by at least 5 directions from upstream and that the downstream value reaches at least 8. The first condition finds the mouth of the valley rather than a point somewhere on the fan; the second and third reject bends and small widenings inside a valley.
+
+\textbf{3. Apex refinement.} The detector tends to fire slightly below the true fan head, where openness has already risen. Each candidate is therefore moved up the channel in 150\,m steps, as long as each step enlarges the delineated fan by at least 5\%, for at most 2\,km.
+
+\textbf{4. Fan delineation by radial profiles.} Following Norini et al.\ \cite{norini2016}, 72 radial profiles are cast from the apex every 5$^\circ$ over the channel-filled surface. Along each profile the slope is measured over a 300\,m window. The profile ends at the fan toe, the first point after 300\,m where the slope stays below 60\% of the fan's own reference slope (clipped to 1--3$^\circ$) for at least 300\,m, or where the ground rises more than 10\,m above its lowest point (an opposite valley wall or ridge). A median filter over neighbouring profiles removes single outliers. The profile ends define a conical surface from the apex; the fan is the area where the DEM lies within 3\,m plus 12\% of local relief of that cone. Using a fan-specific toe slope, rather than one fixed threshold, is our adaptation: it lets steep debris fans and gentle flood fans both close at their own toes.
+
+\textbf{5. Acceptance tests.} A candidate is rejected if the fan is smaller than 0.1\,km$^2$ or shorter than 300\,m; if it is flatter than 1$^\circ$ near the apex (a plain or a bowl); if it spans less than 30$^\circ$ (a valley-floor corridor) or has fewer than four valid profiles; if its apex lies inside an accepted fan or 80\% of its area does (a duplicate); or if the fan is more than 1.5 times larger than its own catchment, which means the apex sits on another stream's fan. At Leh the detector proposes 38 candidates, and 13 fans pass (Figure~\ref{fig:stage1}a).
+
+\textbf{6. Complexes, feeders and morphometry.} Fans that overlap or lie within 60\,m of each other are merged into fan complexes (bajadas), because floods cross the line between coalescing fans. Every stream that enters a complex, at an apex or along its side, becomes a feeder with its own full catchment, traced upstream through the flow directions. Twenty-nine morphometric values are recorded per feeder, among them area, relief, mean slope, drainage density, main-channel length and gradient, form factor, Strahler order, bifurcation and stream-length ratios and the Kirpich time of concentration \cite{kirpich1940}. The Melton ratio (basin relief over the square root of area) sets the expected flow type: clear-water flood below 0.3, debris flood from 0.3 to 0.6 and debris flow above 0.6 \cite{wilford2004,descally2010}.
+
+\begin{table}[t]
+  \caption{Stage 1 parameters (defaults, unchanged for every site in this paper).}
+  \label{tab:stage1}
+  \footnotesize
+  \begin{tabular}{@{}p{0.47\columnwidth}p{0.43\columnwidth}@{}}
+    \toprule
+    Parameter & Value and reason \\
+    \midrule
+    Channel threshold & 0.5\,km$^2$: catches fan-feeding gullies, not hillslopes \\
+    Openness: directions, radius, block angle & 16, 1\,km, 8$^\circ$: a valley wall within 1\,km \\
+    Apex rule & 90\% of the openness 2\,km downstream, rise $\geq$ 5, value $\geq$ 8 \\
+    Channel fill (for profiling) & gullies under $\sim$160\,m wide \\
+    Radial profiles & 72, every 5$^\circ$, up to 8\,km \\
+    Toe & slope $<$ 0.6 $\times$ fan slope (1--3$^\circ$) for 300\,m, or a 10\,m rise \\
+    Cone tolerance & 3\,m + 12\% of local relief \\
+    Acceptance & area $\geq$ 0.1\,km$^2$, length $\geq$ 300\,m, slope $\geq$ 1$^\circ$, span $\geq$ 30$^\circ$, fan $\leq$ 1.5 $\times$ catchment \\
+    Merge gap & 60\,m \\
+    Manual apex snap & nearest channel within 250\,m \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{Manual apexes.} A user can give an apex as longitude and latitude. It is snapped to the nearest channel cell draining at least the channel threshold within 250\,m, and then goes through steps 4--6 like a detected apex. In mode \texttt{both} the manual apexes are added to the detected ones; manual apexes are not refined, so the user's choice of fan head is kept.
+
+\textbf{Why openness and not a steep-zone exit.} Norini et al.\ place apexes where a feeder leaves a steep sub-area defined by a slope threshold. We implemented that detector too, with an automatic Otsu threshold \cite{otsu1979} on the smoothed slope and a concave-channel test. At Leh it proposes 125 exits, 63 pass its own tests and 34 fans are accepted, against 13 with openness, because every gentling of a slope looks like an exit; at Dharali it accepts 26 fans. Openness measures the property that defines an apex, leaving confinement, and is the default.
+
+\textbf{How well it works.} The whole of Stage 1 runs in about 6--15\,s for the Leh DEM (909 $\times$ 781 cells). Against polygons digitised by hand in Assignment~2, the Sabu fan reaches an intersection over union (IoU) of 0.86 and its catchment 0.96; the Sabu catchment is 62.4\,km$^2$ against 64.95\,km$^2$ published \cite{thayyen2013} ($-4\%$), and its Melton ratio of 0.30 places it at the boundary between flood and debris flood. The same settings run unchanged on Trail Canyon in Death Valley, USA, where the apexes fall at the canyon mouths. The detector fails where the trunk valley is itself a gorge, as at Dharali and Kedarnath (Sections~\ref{sec:dharali} and~\ref{sec:kedarnath}): the feeder enters another confined valley, openness never makes the jump, and one manual apex is needed. Lowering the thresholds did not fix this and created false apexes at valley bends, so the detector was left unchanged.
 
 \subsection{Stage 2: two-level AHP}
 \begin{table*}[t]
@@ -386,6 +432,10 @@ We thank Prof. Aaditeshwar Seth for guidance throughout the ICTD course. Buildin
 \bibitem{nobre2011} A.~D. Nobre et~al. 2011. Height Above the Nearest Drainage: a hydrologically relevant new terrain model. \emph{Journal of Hydrology} 404, 13--29.
 \bibitem{holmgren1994} P.~Holmgren. 1994. Multiple flow direction algorithms for runoff modelling in grid based elevation models: an empirical evaluation. \emph{Hydrological Processes} 8(4), 327--334.
 \bibitem{fd2321} Defra and Environment Agency. 2006. \emph{Flood Risks to People, Phase 2}. R\&D Technical Report FD2321/TR1.
+\bibitem{barnes2014} R.~Barnes, C.~Lehman, and D.~Mulla. 2014. Priority-flood: an optimal depression-filling and watershed-labeling algorithm for digital elevation models. \emph{Computers \& Geosciences} 62, 117--127.
+\bibitem{ocallaghan1984} J.~F. O'Callaghan and D.~M. Mark. 1984. The extraction of drainage networks from digital elevation data. \emph{Computer Vision, Graphics, and Image Processing} 28(3), 323--344.
+\bibitem{yokoyama2002} R.~Yokoyama, M.~Shirasawa, and R.~J. Pike. 2002. Visualizing topography by openness: a new application of image processing to digital elevation models. \emph{Photogrammetric Engineering and Remote Sensing} 68(3), 257--265.
+\bibitem{otsu1979} N.~Otsu. 1979. A threshold selection method from gray-level histograms. \emph{IEEE Transactions on Systems, Man, and Cybernetics} 9(1), 62--66.
 \bibitem{chow1988} V.~T. Chow, D.~R. Maidment, and L.~W. Mays. 1988. \emph{Applied Hydrology}. McGraw-Hill.
 \bibitem{kirpich1940} Z.~P. Kirpich. 1940. Time of concentration of small agricultural watersheds. \emph{Civil Engineering} 10(6), 362.
 \bibitem{obrien1988} J.~S. O'Brien and P.~Y. Julien. 1988. Laboratory analysis of mudflow properties. \emph{Journal of Hydraulic Engineering} 114(8), 877--887.
