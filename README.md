@@ -1,4 +1,4 @@
-# fanrisk — flash-flood risk on alluvial fans, from a DEM
+# fanrisk: flash-flood risk on alluvial fans, from a DEM
 
 **fanrisk** maps flash-flood risk for settlements built on alluvial fans in mountain valleys. It starts from nothing but a digital elevation model (DEM) and gives you:
 
@@ -10,7 +10,7 @@
 
 It was built and tested on the **August 2010 Leh cloudburst** (Sabu–Choglamsar fan, Ladakh). It was then run with no tuning on two more events: the **5 August 2025 Dharali debris flow** (Uttarkashi) and the **June 2013 Kedarnath flood** (Rudraprayag), where the whole chain including HEC-RAS was run with default settings to check that nothing is tuned to Leh.
 
-ICTD 2026–27 project, IIT Delhi — Akhtar Hussain and Saharsh Laud (guide: Prof. Aaditeshwar Seth).
+ICTD 2026–27 project, IIT Delhi: Akhtar Hussain and Saharsh Laud (guide: Prof. Aaditeshwar Seth).
 
 ```mermaid
 flowchart LR
@@ -51,11 +51,11 @@ Open `results/leh_2010/viewer.html` in a browser for the interactive map. You ca
 
 | Check | fanrisk | Published |
 | --- | --- | --- |
-| Fan found fully automatically | **no** (narrow trunk valley, see Limitations) | — |
+| Fan found fully automatically | **no** (narrow trunk valley, see Limitations) | - |
 | With one manual fan apex: catchment area | 18.3 km² | 17 km² (Kumar et al. 2026) |
 | Melton ruggedness | 0.82 | 0.80 |
 | Flow type | **debris flow** | debris flow |
-| Risk within 250 m of the deposit | 46% of cells high or above, highest score 0.77 | — |
+| Risk within 250 m of the deposit | 46% of cells high or above, highest score 0.77 | - |
 
 For Leh the same defaults give a clear-water flood, which is also correct.
 
@@ -66,12 +66,12 @@ Default humid-mountain settings, the tool's own SCS storm hydrograph (210 mm in 
 | Check | Kedarnath | Leh, for comparison |
 | --- | --- | --- |
 | Trunk fan found fully automatically | **no** (needs one manual apex, as at Dharali) | yes |
-| Catchment at the apex; at the town | 18.6 km²; 38.6 km² (reaches the published 67 km² valley area 5.5 km downstream) | — |
+| Catchment at the apex; at the town | 18.6 km²; 38.6 km² (reaches the published 67 km² valley area 5.5 km downstream) | - |
 | Melton ruggedness; flow type | 0.72; debris flow | 0.30; clear-water flood |
 | Peak inflow, R04 clear water; R05 bulked for debris | 109; 199 m³/s | 1,070 m³/s (observed) |
-| Depth and speed through the town | 1.6–2.6 m, 5–6 m/s (extreme hazard) | — |
+| Depth and speed through the town | 1.6–2.6 m, 5–6 m/s (extreme hazard) | - |
 | Water against the model edge; volume error | none; < 0.01% | none |
-| HEC-RAS significant/extreme cells that the AHP rates high or very high | **89%** | — |
+| HEC-RAS significant/extreme cells that the AHP rates high or very high | **89%** | - |
 | AUC of the AHP risk map against the simulated flood | **0.73–0.75** | 0.83–0.86 |
 
 The AHP flags all seven feeders of the fan complex, while HEC-RAS simulates one, which explains most of the lower agreement. The test found one Leh-only step in the code: the outflow boundary was lengthened along a single edge of the model outline. It now follows the outline round corners (`fanrisk/ras/geometry.py`). No AHP weight or HEC-RAS parameter was changed. The inflow is rain only; the Chorabari lake outburst is not modelled, so these flows are a lower bound.
